@@ -11,7 +11,7 @@ const VisitorsPageCard = ({
   return (
     <div
       onClick={() => {
-        navigate('/signup')
+        navigate('/signin')
       }}
       className="visitorsPageCardContainer"
     >

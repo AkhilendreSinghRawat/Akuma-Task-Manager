@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react'
 
 import { toast } from 'react-toastify'
 import { Dna } from 'react-loader-spinner'
+import { useNavigate } from 'react-router-dom'
 import { PasswordValidator } from '../../utils/PasswordValidator'
 
 import Navbar from '../../utils/Navbar'
@@ -13,6 +14,8 @@ const Signup = () => {
   const passwordRef = useRef()
   const confirmPasswordRef = useRef()
   const [loader, setLoader] = useState(false)
+
+  const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -31,15 +34,15 @@ const Signup = () => {
       })
       .then((res) => {
         if (res.status === 200) {
-          sessionStorage.setItem(
+          localStorage.setItem(
             'token',
             JSON.stringify({
               accessToken: res?.data?.accessToken,
               refreshToken: res?.data?.refreshToken,
             })
           )
-          toast.success('Successfully Registered')
           navigate('/home')
+          toast.success('Successfully Registered')
         } else {
           toast.error('Something went wrong!')
         }

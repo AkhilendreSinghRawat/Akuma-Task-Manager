@@ -1,5 +1,5 @@
 const Auth = () => {
-  const user = sessionStorage.getItem('token')
+  const user = localStorage.getItem('token')
 
   if (user) {
     return true

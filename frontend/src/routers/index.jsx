@@ -16,15 +16,7 @@ const Routing = () => {
         <ToastContainer role="alert" ariaLabel="toast" theme="colored" />
       </div>
       <Routes>
-        <Route
-          path="/"
-          exact
-          element={
-            <RestrictedRoute>
-              <VisitorsPage />
-            </RestrictedRoute>
-          }
-        />
+        <Route path="/" exact element={<VisitorsPage />} />
         <Route
           path="/signup"
           element={
@@ -44,9 +36,9 @@ const Routing = () => {
         <Route
           path="/home"
           element={
-            // <ProtectedRoute>
-            <Home />
-            // </ProtectedRoute>
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
           }
         />
       </Routes>

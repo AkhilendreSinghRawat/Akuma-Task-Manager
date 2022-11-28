@@ -1,5 +1,6 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { toast } from 'react-toastify'
+import { Dna } from 'react-loader-spinner'
 
 import axios from '../../utils/axios'
 import Navbar from '../../utils/Navbar'
@@ -7,10 +8,13 @@ import Navbar from '../../utils/Navbar'
 const Login = () => {
   const emailRef = useRef()
   const passwordRef = useRef()
+  const [loader, setLoader] = useState(false)
 
   const handleSubmit = (e) => {
     e.preventDefault()
 
+    setLoader(true)
+    
     axios
       .post('/login', {
         email: emailRef?.current?.value,
@@ -27,17 +31,19 @@ const Login = () => {
           )
           toast.success('Successfully Logged In')
           navigate('/home')
-          return
+        } else {
+          toast.error('Something went wrong!')
         }
-        toast.error('Something went wrong!')
+        setLoader(false)
       })
       .catch((err) => {
         toast.error(err?.response?.data?.message)
+        setLoader(false)
       })
   }
 
   return (
-    <div style={{ height: '93vh' }}>
+    <div className="componenetHeight">
       <Navbar />
       <div className="FormContainer">
         <form className="Form" onSubmit={handleSubmit}>
@@ -57,9 +63,25 @@ const Login = () => {
             required
             ref={passwordRef}
           />
-          <button className="Submit" type="submit">
-            Sign In
-          </button>
+          {loader ? (
+            <Dna
+              visible={true}
+              height="35"
+              width="100"
+              ariaLabel="dna-loading"
+              wrapperStyle={{
+                width: '100%',
+                backgroundColor: 'darkcyan',
+                borderRadius: '0.5vw',
+                margin: '1vh 0',
+              }}
+              wrapperClass="dna-wrapper"
+            />
+          ) : (
+            <button className="Submit" type="submit">
+              Sign In
+            </button>
+          )}
           <div>Not Registered?</div>
           <a href="/signup">Sign Up</a>
         </form>

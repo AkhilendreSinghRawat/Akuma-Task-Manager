@@ -134,6 +134,10 @@ body {
   margin: 0 1vw;
 }
 
+.componenetHeight {
+  height: 89vh;
+}
+
 @media only screen and (max-width: 750px) {
   .visitorsPageCardsContainer {
     flex-direction: column;

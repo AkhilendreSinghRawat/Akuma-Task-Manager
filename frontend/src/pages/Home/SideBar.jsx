@@ -1,18 +1,6 @@
 import React, { useState } from 'react'
 
-import { FaHome } from 'react-icons/fa'
-import { CgProfile } from 'react-icons/cg'
-import { BiAddToQueue } from 'react-icons/bi'
-
-const SideBarContent = [
-  { icon: <FaHome />, name: 'Dashboard' },
-  { icon: <CgProfile />, name: 'Profile' },
-  { icon: <BiAddToQueue />, name: 'Create a new project' },
-]
-
-const SideBar = () => {
-  const [selectedCardIndex, setSelectedCardIndex] = useState(0)
-
+const SideBar = ({ selectedCardIndex, setSelectedCardIndex,SideBarContent }) => {
   return (
     <div className="SideBarContentMainContainer">
       {SideBarContent?.map((content, index) => {

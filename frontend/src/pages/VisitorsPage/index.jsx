@@ -1,5 +1,6 @@
 import React from 'react'
-import Navbar from './Navbar'
+import Footer from '../../utils/Footer'
+import Navbar from '../../utils/Navbar'
 import VisitorsPageCard from './VisitorsPageCard'
 
 const VisitorsPage = () => {
@@ -23,6 +24,7 @@ const VisitorsPage = () => {
           buttonText={'Log In'}
         />
       </div>
+      <Footer />
     </div>
   )
 }

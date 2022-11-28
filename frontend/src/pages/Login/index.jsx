@@ -1,4 +1,8 @@
 import React, { useRef } from 'react'
+import { toast } from 'react-toastify'
+
+import axios from '../../utils/axios'
+import Navbar from '../../utils/Navbar'
 
 const Login = () => {
   const emailRef = useRef()
@@ -21,43 +25,45 @@ const Login = () => {
               refreshToken: res?.data?.refreshToken,
             })
           )
-          navigate('/')
+          toast.success('Successfully Logged In')
+          navigate('/home')
           return
         }
-        console.log('Something went wrong')
+        toast.error('Something went wrong!')
       })
       .catch((err) => {
-        setErrorMessage(err?.response?.data.message)
-        setShowError(true)
-        setTimeout(() => setShowError(false), 2000)
+        toast.error(err?.response?.data?.message)
       })
   }
 
   return (
-    <div className="FormContainer">
-      <form className="Form" onSubmit={handleSubmit}>
-        <label>Email</label>
-        <input
-          className="Input"
-          id="email"
-          type="email"
-          required
-          ref={emailRef}
-        />
-        <label>Password</label>
-        <input
-          className="Input"
-          id="password"
-          type="password"
-          required
-          ref={passwordRef}
-        />
-        <button className="Submit" type="submit">
-          Sign In
-        </button>
-        <div>Not Registered?</div>
-        <a href="/signup">Sign Up</a>
-      </form>
+    <div style={{ height: '93vh' }}>
+      <Navbar />
+      <div className="FormContainer">
+        <form className="Form" onSubmit={handleSubmit}>
+          <label>Email</label>
+          <input
+            className="Input"
+            id="email"
+            type="email"
+            required
+            ref={emailRef}
+          />
+          <label>Password</label>
+          <input
+            className="Input"
+            id="password"
+            type="password"
+            required
+            ref={passwordRef}
+          />
+          <button className="Submit" type="submit">
+            Sign In
+          </button>
+          <div>Not Registered?</div>
+          <a href="/signup">Sign Up</a>
+        </form>
+      </div>
     </div>
   )
 }

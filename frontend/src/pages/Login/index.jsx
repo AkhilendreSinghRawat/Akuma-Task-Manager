@@ -1,6 +1,8 @@
 import React, { useRef, useState } from 'react'
+
 import { toast } from 'react-toastify'
 import { Dna } from 'react-loader-spinner'
+import { useNavigate } from 'react-router-dom'
 
 import axios from '../../utils/axios'
 import Navbar from '../../utils/Navbar'
@@ -10,11 +12,13 @@ const Login = () => {
   const passwordRef = useRef()
   const [loader, setLoader] = useState(false)
 
+  const navigate = useNavigate()
+
   const handleSubmit = (e) => {
     e.preventDefault()
 
     setLoader(true)
-    
+
     axios
       .post('/login', {
         email: emailRef?.current?.value,
@@ -22,15 +26,15 @@ const Login = () => {
       })
       .then((res) => {
         if (res.status === 200) {
-          sessionStorage.setItem(
+          localStorage.setItem(
             'token',
             JSON.stringify({
               accessToken: res?.data?.accessToken,
               refreshToken: res?.data?.refreshToken,
             })
           )
-          toast.success('Successfully Logged In')
           navigate('/home')
+          toast.success('Successfully Logged In')
         } else {
           toast.error('Something went wrong!')
         }

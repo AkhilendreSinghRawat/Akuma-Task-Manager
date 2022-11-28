@@ -2,8 +2,10 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import reactLogo from '../assets/react.svg'
 
-const Navbar = () => {
+const Navbar = ({ visitorsPage = false }) => {
   const navigate = useNavigate()
+
+  const user = localStorage.getItem('token')
 
   return (
     <div className="navbarContainer">
@@ -16,24 +18,37 @@ const Navbar = () => {
         <img src={reactLogo} className="logo react" alt="React logo" />
         <div className="navbarHeading">Akuma</div>
       </div>
-      <div className="navbarRightSideContainer">
-        <div
-          onClick={() => {
-            navigate('/login')
-          }}
-          className="button"
-        >
-          Log In
-        </div>
-        <div
-          onClick={() => {
-            navigate('/signup')
-          }}
-          className="button"
-        >
-          Sign Up
-        </div>
-      </div>
+     {visitorsPage && <div className="navbarRightSideContainer">
+        {user ? (
+          <div
+            onClick={() => {
+              navigate('/home')
+            }}
+            className="button"
+          >
+            Get Started!
+          </div>
+        ) : (
+          <>
+            <div
+              onClick={() => {
+                navigate('/signin')
+              }}
+              className="button"
+            >
+              Log In
+            </div>
+            <div
+              onClick={() => {
+                navigate('/signup')
+              }}
+              className="button"
+            >
+              Sign Up
+            </div>
+          </>
+        )}
+      </div>}
     </div>
   )
 }

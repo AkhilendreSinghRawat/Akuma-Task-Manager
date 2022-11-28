@@ -1,98 +1,23 @@
 :root {
-  height: 100vh;
-  width: 100vw;
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  background-color: rgb(3, 58, 80);
+
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
+
 body {
   margin: 0;
-  padding: 0;
-  min-width: 100vw;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
   min-height: 100vh;
-}
-
-.mainContainer {
-  height: 100vh;
-  width: 100vw;
-  background: linear-gradient(skyblue, transparent);
-  background-color: rgb(3, 58, 80);
-}
-
-.navbarContainer {
-  min-height: 7vh;
-  background-color: rgb(213, 238, 248);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.button {
-  font-size: large;
-  color: rgb(102, 100, 100);
-  cursor: pointer;
-  margin: 0 1vw;
-}
-
-.navbarRightSideContainer {
-  display: flex;
-  flex-direction: row;
-  margin: 0vh 2vw;
-}
-
-.navbarLeftSideContainer {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin: 0vh 3vw;
-}
-
-.navbarHeading {
-  font-size: xx-large;
-  color: rgb(63, 62, 62);
-  margin: 0vh 0.5vw;
-  cursor: default;
-}
-
-.visitorsPageCardsContainer {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-}
-
-.visitorsPageCardContainer {
-  border: solid 1px white;
-  width: 20vw;
-  padding: 10vh 10vw;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  color: white;
-  margin-top: 10vh;
-}
-
-.visitorsPageCardContainer:hover {
-  background-color: rgb(185, 208, 218);
-  color: rgb(71, 70, 70);
-}
-
-.visitorsPageCardTextHeading {
-  font-size: xx-large;
-  margin: 0 -1vw;
-}
-
-.visitorsPageCardTextDiscription {
-  font-size: large;
-}
-
-@media only screen and (max-width: 750px) {
-  .visitorsPageCardsContainer {
-    flex-direction: column;
-    align-items: center;
-  }
-  .visitorsPageCardContainer {
-    width: 70vw;
-  }
 }

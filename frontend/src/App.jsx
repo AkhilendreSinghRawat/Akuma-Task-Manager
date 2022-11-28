@@ -1,7 +1,8 @@
 import { BrowserRouter as Router } from 'react-router-dom'
 import Routing from './routers'
+import './App.css'
 
-function Index() {
+function App() {
   return (
     <div className="mainContainer">
       <Router>
@@ -11,4 +12,4 @@ function Index() {
   )
 }
 
-export default Index
+export default App

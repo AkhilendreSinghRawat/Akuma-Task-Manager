@@ -1,13 +1,18 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import reactLogo from '../../assets/react.svg'
+import reactLogo from '../assets/react.svg'
 
 const Navbar = () => {
   const navigate = useNavigate()
 
   return (
     <div className="navbarContainer">
-      <div className="navbarLeftSideContainer">
+      <div
+        onClick={() => {
+          navigate('/')
+        }}
+        className="navbarLeftSideContainer"
+      >
         <img src={reactLogo} className="logo react" alt="React logo" />
         <div className="navbarHeading">Akuma</div>
       </div>

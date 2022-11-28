@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 
 import axios from '../../utils/axios'
 import Navbar from '../../utils/Navbar'
+import Footer from '../../utils/Footer'
 
 const Login = () => {
   const emailRef = useRef()
@@ -90,6 +91,7 @@ const Login = () => {
           <a href="/signup">Sign Up</a>
         </form>
       </div>
+      <Footer />
     </div>
   )
 }

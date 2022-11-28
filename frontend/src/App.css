@@ -25,7 +25,7 @@ body {
 }
 
 .navbarContainer {
-  min-height: 7vh;
+  min-height: 50px;
   background-color: rgb(213, 238, 248);
   display: flex;
   justify-content: space-between;
@@ -108,8 +108,9 @@ body {
 .Input {
   outline: none;
   height: 3vh;
-  width: 15vw;
-  margin-bottom: 1vh;
+  width: 100%;
+  display: flex;
+  align-self: center;
 }
 
 .Submit {
@@ -129,13 +130,50 @@ body {
 }
 
 .Footer {
-  position: absolute;
-  bottom: 0;
   margin: 0 1vw;
+  text-decoration: none;
+  color: black;
 }
 
 .componenetHeight {
-  height: 89vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.SideBarContentMainContainer {
+  background-color: #ddd;
+  display: flex;
+  flex: 1;
+  border-right: solid 1px darkGray;
+  flex-direction: column;
+}
+
+.SideBarContentCard {
+  display: flex;
+  flex-direction: row;
+}
+
+.SideBarContentCard:hover {
+  background-color: rgb(206, 203, 203);
+  color: skyblue;
+}
+
+.SideBarContentCardIcon {
+  padding: 1vh 1vw;
+}
+
+.SideBarContentCardName {
+  padding: 1vh 0;
+}
+
+.colorHightlightCardContent {
+  color: skyblue;
+}
+
+.colorHightlightCard {
+  background-color: white;
 }
 
 @media only screen and (max-width: 750px) {
@@ -145,8 +183,5 @@ body {
   }
   .visitorsPageCardContainer {
     width: 70vw;
-  }
-  .Footer {
-    position: sticky;
   }
 }

@@ -6,6 +6,10 @@ const Navbar = ({ visitorsPage = false }) => {
   const navigate = useNavigate()
 
   const user = localStorage.getItem('token')
+  const handleLogout = () => {
+    localStorage.clear()
+    navigate('/signin')
+  }
 
   return (
     <div className="navbarContainer">
@@ -18,15 +22,15 @@ const Navbar = ({ visitorsPage = false }) => {
         <img src={reactLogo} className="logo react" alt="React logo" />
         <div className="navbarHeading">Akuma</div>
       </div>
-     {visitorsPage && <div className="navbarRightSideContainer">
+      <div className="navbarRightSideContainer">
         {user ? (
           <div
             onClick={() => {
-              navigate('/home')
+              visitorsPage ? navigate('/home') : handleLogout()
             }}
             className="button"
           >
-            Get Started!
+            {visitorsPage ? 'Get Started!' : 'Sign Out'}
           </div>
         ) : (
           <>
@@ -48,7 +52,7 @@ const Navbar = ({ visitorsPage = false }) => {
             </div>
           </>
         )}
-      </div>}
+      </div>
     </div>
   )
 }

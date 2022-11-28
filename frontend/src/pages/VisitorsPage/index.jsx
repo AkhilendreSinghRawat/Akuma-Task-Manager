@@ -5,7 +5,7 @@ import VisitorsPageCard from './VisitorsPageCard'
 
 const VisitorsPage = () => {
   return (
-    <div>
+    <div className="componenetHeight">
       <Navbar visitorsPage={true} />
       <div className="visitorsPageCardsContainer">
         <VisitorsPageCard

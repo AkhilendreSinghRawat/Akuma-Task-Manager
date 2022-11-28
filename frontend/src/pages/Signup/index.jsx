@@ -31,8 +31,15 @@ const Signup = () => {
       })
       .then((res) => {
         if (res.status === 200) {
+          sessionStorage.setItem(
+            'token',
+            JSON.stringify({
+              accessToken: res?.data?.accessToken,
+              refreshToken: res?.data?.refreshToken,
+            })
+          )
           toast.success('Successfully Registered')
-          navigate('/signin')
+          navigate('/home')
         } else {
           toast.error('Something went wrong!')
         }
@@ -45,7 +52,7 @@ const Signup = () => {
   }
 
   return (
-    <div style={{ height: '89vh' }}>
+    <div className="componenetHeight">
       <Navbar />
       <div className="FormContainer">
         <form className="Form" onSubmit={handleSubmit}>

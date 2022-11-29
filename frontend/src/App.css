@@ -175,6 +175,40 @@ body {
   background-color: white;
 }
 
+.ProjectDataCardContainer {
+  background-image: linear-gradient(white, lightblue);
+  border: 1px solid lightgray;
+}
+
+.ProjectDataCardDataContainer {
+  margin: 2vh 1vw;
+}
+
+.ProjectDataCardHeading {
+  font-size: x-large;
+  color: darkslategrey;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.ProjectDataCardDiscription {
+  color: darkslategrey;
+  font-family: cursive;
+  margin: 0 0.5vw;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.ProjectDataCardContainer:hover {
+  word-break: break-all;
+  white-space: pre-wrap;
+}
+
+.boxShadow {
+  border: none;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
+}
+
 @media only screen and (max-width: 750px) {
   .visitorsPageCardsContainer {
     flex-direction: column;

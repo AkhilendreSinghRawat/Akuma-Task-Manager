@@ -22,7 +22,12 @@ const Home = () => {
   const [selectedCardIndex, setSelectedCardIndex] = useState(0)
 
   return (
-    <div>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
       <Navbar />
       <div
         style={{
@@ -41,7 +46,8 @@ const Home = () => {
             backgroundColor: 'white',
             display: 'flex',
             flex: 5,
-            height: '93vh',
+            minHeight: '93vh',
+            height: '100%',
           }}
         >
           {SideBarContent[selectedCardIndex]?.component}

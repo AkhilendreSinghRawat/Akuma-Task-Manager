@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import Navbar from '../../utils/Navbar'
 import SideBar from './SideBar'
@@ -9,7 +9,11 @@ import { CgProfile } from 'react-icons/cg'
 import { BiAddToQueue } from 'react-icons/bi'
 
 const SideBarContent = [
-  { icon: <FaHome />, name: 'Dashboard', component: <Dashboard /> },
+  {
+    icon: <FaHome />,
+    name: 'Dashboard',
+    component: <Dashboard />,
+  },
   { icon: <CgProfile />, name: 'Profile', component: <Dashboard /> },
   {
     icon: <BiAddToQueue />,

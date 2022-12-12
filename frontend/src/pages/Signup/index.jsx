@@ -1,12 +1,14 @@
 import React, { useRef, useState } from 'react'
 
+import axios from '../../utils/axios'
 import { toast } from 'react-toastify'
 import { Dna } from 'react-loader-spinner'
 import { useNavigate } from 'react-router-dom'
 import { PasswordValidator } from '../../utils/PasswordValidator'
+import { useDispatch, useSelector } from 'react-redux'
+import { setUserData } from '../../redux/slices/userDataSlice'
 
 import Navbar from '../../utils/Navbar'
-import axios from '../../utils/axios'
 import Footer from '../../utils/Footer'
 
 const Signup = () => {
@@ -14,8 +16,6 @@ const Signup = () => {
   const passwordRef = useRef()
   const confirmPasswordRef = useRef()
   const [loader, setLoader] = useState(false)
-
-  const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -29,8 +29,10 @@ const Signup = () => {
 
     axios
       .post('/register', {
-        email: emailRef?.current?.value,
-        password: passwordRef?.current?.value,
+        email: 'test@test.com',
+        // emailRef?.current?.value,
+        password: 'Akhilendre@321',
+        // passwordRef?.current?.value,
       })
       .then((res) => {
         if (res.status === 200) {
@@ -65,6 +67,7 @@ const Signup = () => {
             id="email"
             type="email"
             required
+            value={'test@test.com'}
             ref={emailRef}
           />
           <label>Password</label>
@@ -73,6 +76,7 @@ const Signup = () => {
             id="password"
             type="password"
             required
+            value={'Akhilendre@321'}
             ref={passwordRef}
           />
           <label>ConfirmPassword</label>
@@ -81,6 +85,7 @@ const Signup = () => {
             id="confirmPassword"
             type="password"
             required
+            value={'Akhilendre@321'}
             ref={confirmPasswordRef}
           />
           {loader ? (

@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
 
-const SideBar = ({ selectedCardIndex, setSelectedCardIndex,SideBarContent }) => {
+const SideBar = ({
+  selectedCardIndex,
+  setSelectedCardIndex,
+  SideBarContent,
+}) => {
   return (
     <div className="SideBarContentMainContainer">
       {SideBarContent?.map((content, index) => {

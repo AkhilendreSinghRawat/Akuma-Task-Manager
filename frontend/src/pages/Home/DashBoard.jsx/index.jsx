@@ -64,6 +64,7 @@ const Dashboard = () => {
           return (
             <ProjectDataCard
               key={index}
+              projectId={index}
               heading={project?.heading}
               discription={project?.discription}
             />

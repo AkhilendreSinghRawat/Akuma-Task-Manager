@@ -1,6 +1,9 @@
 import React from 'react'
+
+import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import reactLogo from '../assets/react.svg'
+import axios from './axios';
 
 const Navbar = ({ visitorsPage = false }) => {
   const navigate = useNavigate()
@@ -8,6 +11,8 @@ const Navbar = ({ visitorsPage = false }) => {
   const user = localStorage.getItem('token')
   const handleLogout = () => {
     localStorage.clear()
+    // axios.delete('/logout')
+    toast.success('Successfully Logged out')
     navigate('/signin')
   }
 

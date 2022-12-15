@@ -1,6 +1,31 @@
-import React, { useState } from 'react'
+import React from 'react'
 
-const SideBar = ({ selectedCardIndex, setSelectedCardIndex,SideBarContent }) => {
+import { useDispatch, useSelector } from 'react-redux'
+
+import { FaHome } from 'react-icons/fa'
+import { CgProfile } from 'react-icons/cg'
+import { BiAddToQueue } from 'react-icons/bi'
+import { setSelectedCardIndex } from '../../redux/slices/sideBarSlice'
+
+const SideBarContent = [
+  {
+    name: 'Dashboard',
+    icon: <FaHome />,
+  },
+  {
+    name: 'Profile',
+    icon: <CgProfile />,
+  },
+  {
+    name: 'Create a new project',
+    icon: <BiAddToQueue />,
+  },
+]
+
+const SideBar = () => {
+  const dispatch = useDispatch()
+  const { selectedCardIndex } = useSelector((state) => state.sideBarData)
+
   return (
     <div className="SideBarContentMainContainer">
       {SideBarContent?.map((content, index) => {
@@ -11,7 +36,7 @@ const SideBar = ({ selectedCardIndex, setSelectedCardIndex,SideBarContent }) => 
               index === selectedCardIndex && 'colorHightlightCard'
             }`}
             onClick={() => {
-              setSelectedCardIndex(index)
+              dispatch(setSelectedCardIndex(index))
             }}
           >
             <div

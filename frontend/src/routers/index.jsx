@@ -1,11 +1,15 @@
 import React from 'react'
-import ProtectedRoute from './ProtectedRoute'
+
 import { Routes, Route } from 'react-router-dom'
+import ProtectedRoute from './ProtectedRoute'
 import RestrictedRoute from './RestrictedRoute'
+
 import VisitorsPage from '../pages/VisitorsPage'
 import Signup from '../pages/Signup'
 import Login from '../pages/Login'
 import Home from '../pages/Home'
+import SpecificProjectDetail from '../pages/Home/SpecificProjectDetail'
+
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -35,9 +39,19 @@ const Routing = () => {
         />
         <Route
           path="/home"
+          exact
           element={
             <ProtectedRoute>
               <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/home/project/:id/:name"
+          exact
+          element={
+            <ProtectedRoute>
+              <SpecificProjectDetail />
             </ProtectedRoute>
           }
         />

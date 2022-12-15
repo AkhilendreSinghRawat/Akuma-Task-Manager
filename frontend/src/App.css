@@ -30,6 +30,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
 }
 
 .button {
@@ -207,6 +208,21 @@ body {
 .boxShadow {
   border: none;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
+}
+
+.headingCSS {
+  font-size: xx-large;
+  color: darkcyan;
+  margin: 2vh 2vw;
+  font-weight: bold;
+  width: 90%;
+  word-break: break-all;
+  line-height: 30px;
+}
+
+.grayLine {
+  border-bottom: solid 1px lightgray;
+  margin: 1vh 1vw;
 }
 
 @media only screen and (max-width: 750px) {

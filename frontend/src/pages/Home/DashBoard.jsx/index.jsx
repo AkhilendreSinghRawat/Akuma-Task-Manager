@@ -8,22 +8,22 @@ const Dashboard = () => {
       heading: 'Dashboard',
       discription:
         'salkdjflkdsajfldsa;kjfsalkdjfldsakjflksajflkdsajf;lsakjflkdsajflkdsanvkdsadnv;lsan./asndlkfnsav.dsanvlkdsanv',
+      id: 0,
     },
     {
       heading:
         'Dashboardsadjflkdsajflkdssadkfm;ksdaf;sadfk;sldkf;dslkfajflkdsjflkdsjflksdjf',
       discription: 'salkdjflkdsajfldsa;kjf',
+      id: 1,
     },
-    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf' },
-    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf' },
-    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf' },
-    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf' },
-    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf' },
-    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf' },
-    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf' },
-    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf' },
-    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf' },
-    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf' },
+    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf', id: 2 },
+    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf', id: 3 },
+    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf', id: 4 },
+    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf', id: 5 },
+    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf', id: 6 },
+    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf', id: 7 },
+    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf', id: 8 },
+    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf', id: 9 },
   ])
 
   // useEffect(() => {
@@ -35,26 +35,12 @@ const Dashboard = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-      <div
-        style={{
-          fontSize: 'xx-large',
-          color: 'darkcyan',
-          margin: '2vh 2vw',
-          fontWeight: 'bold',
-        }}
-      >
-        Dashboard
-      </div>
-      <div
-        style={{
-          borderBottom: 'solid 1px lightgray',
-          margin: '1vh 1vw',
-        }}
-      />
+      <div className="headingCSS">Dashboard</div>
+      <div className="grayLine" />
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit,minmax(500px,1fr))',
+          gridTemplateColumns: 'repeat(auto-fit,minmax(400px,1fr))',
           gap: '1rem',
           alignItems: 'flex-start',
           margin: '0 1vw',
@@ -64,6 +50,7 @@ const Dashboard = () => {
           return (
             <ProjectDataCard
               key={index}
+              projectId={project?.id}
               heading={project?.heading}
               discription={project?.discription}
             />

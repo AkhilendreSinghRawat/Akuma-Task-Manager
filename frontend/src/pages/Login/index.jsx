@@ -22,8 +22,10 @@ const Login = () => {
 
     axios
       .post('/login', {
-        email: emailRef?.current?.value,
-        password: passwordRef?.current?.value,
+        email: 'test@test.com',
+        //emailRef?.current?.value,
+        password: 'Akhilendre@321',
+        //passwordRef?.current?.value,
       })
       .then((res) => {
         if (res.status === 200) {
@@ -58,6 +60,7 @@ const Login = () => {
             id="email"
             type="email"
             required
+            value={'test@test.com'}
             ref={emailRef}
           />
           <label>Password</label>
@@ -66,6 +69,7 @@ const Login = () => {
             id="password"
             type="password"
             required
+            value={'Akhilendre@321'}
             ref={passwordRef}
           />
           {loader ? (

@@ -23,11 +23,11 @@ const refreshTokenModel = require('./Schemas/refreshTokenSchema.jsx')
 const DATA = { secret: 'Genda Swami' }
 
 const generateAccessToken = (user) => {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' })
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' })
 }
 
 const generateRefreshToken = (user) => {
-  return jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' })
+  return jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '30d' })
 }
 
 const authenticateToken = (req, res, next) => {

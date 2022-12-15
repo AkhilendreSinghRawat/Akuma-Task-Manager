@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit'
-import userReducer from './slices/userDataSlice'
+import sideBarData from './slices/sideBarSlice'
 
 export const store = configureStore({
   reducer: {
-    userReducer,
+    sideBarData,
   },
 })

@@ -11,12 +11,15 @@ const SpecificProjectDetail = () => {
   const { id, name } = useParams()
   const navigate = useNavigate()
 
-  const [projectData, setProjectData] = React.useState([
-    {
-      id: 0,
-      
-    }
-  ])
+  const [projectData, setProjectData] = React.useState({
+    id: id,
+    data: {
+      1: { name: 'TO DO' },
+      2: { name: 'IN PROGRESS' },
+      4: { name: 'ON HOLD' },
+      3: { name: 'DONE ✔️' },
+    },
+  })
 
   const handleBackArrowClick = () => {
     navigate('/home')
@@ -58,7 +61,7 @@ const SpecificProjectDetail = () => {
             {name.substring(1)}
           </div>
           <div className="grayLine" />
-          <ListPage />
+          <ListPage projectData={projectData?.data} />
         </div>
       </div>
     </div>

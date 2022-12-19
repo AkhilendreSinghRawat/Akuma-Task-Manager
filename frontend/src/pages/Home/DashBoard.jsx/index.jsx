@@ -16,14 +16,46 @@ const Dashboard = () => {
       discription: 'salkdjflkdsajfldsa;kjf',
       id: 1,
     },
-    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf', id: 2 },
-    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf', id: 3 },
-    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf', id: 4 },
-    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf', id: 5 },
-    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf', id: 6 },
-    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf', id: 7 },
-    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf', id: 8 },
-    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf', id: 9 },
+    {
+      heading: 'Dashboard',
+      discription: 'salkdjflkdsajfldsa;kjf',
+      id: 2,
+    },
+    {
+      heading: 'Dashboard',
+      discription: 'salkdjflkdsajfldsa;kjf',
+      id: 3,
+    },
+    {
+      heading: 'Dashboard',
+      discription: 'salkdjflkdsajfldsa;kjf',
+      id: 4,
+    },
+    {
+      heading: 'Dashboard',
+      discription: 'salkdjflkdsajfldsa;kjf',
+      id: 5,
+    },
+    {
+      heading: 'Dashboard',
+      discription: 'salkdjflkdsajfldsa;kjf',
+      id: 6,
+    },
+    {
+      heading: 'Dashboard',
+      discription: 'salkdjflkdsajfldsa;kjf',
+      id: 7,
+    },
+    {
+      heading: 'Dashboard',
+      discription: 'salkdjflkdsajfldsa;kjf',
+      id: 8,
+    },
+    {
+      heading: 'Dashboard',
+      discription: 'salkdjflkdsajfldsa;kjf',
+      id: 9,
+    },
   ])
 
   // useEffect(() => {

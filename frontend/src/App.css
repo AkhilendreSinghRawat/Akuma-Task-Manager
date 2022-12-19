@@ -225,6 +225,20 @@ body {
   margin: 1vh 1vw;
 }
 
+.AddListCss {
+  display: flex;
+  padding: 2rem;
+  height: fit-content;
+  border-radius: 50%;
+  background-color: white;
+  box-shadow: 2px 2px 5px 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.AddListCss:hover {
+  background-color: #ddd;
+}
+
 @media only screen and (max-width: 750px) {
   .visitorsPageCardsContainer {
     flex-direction: column;

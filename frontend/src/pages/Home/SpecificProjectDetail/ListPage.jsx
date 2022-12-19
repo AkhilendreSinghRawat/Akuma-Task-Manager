@@ -1,24 +1,59 @@
 import React from 'react'
 
+import { GrAdd } from 'react-icons/gr'
+import { Rnd } from 'react-rnd'
+
 import CardHolderPage from './CardHolderPage'
 
-const ListPage = () => {
+const ListPage = ({ projectData }) => {
+  const handleAddListClick = () => {}
+
+  // let x = -290
+
   return (
     <div
+      className="ListPageContainer"
       style={{
-        backgroundColor: '#ddd',
-        height: '100%',
+        backgroundColor: '#dddd',
         maxWidth: '83.3vw',
-        minHeight: 'fit-content',
-        border: 'solid 1px lightgray',
         display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
         overflowX: 'scroll',
       }}
     >
-      <CardHolderPage />
-      <CardHolderPage />
-      <CardHolderPage />
-      <CardHolderPage />
+      {Object.keys(projectData)
+        ?.sort()
+        .map((item, index) => {
+          // x += 290
+          return (
+            // <Rnd
+            //   key={index}
+            //   style={{
+            //     position: 'relative',
+            //     display: 'flex',
+            //     justifyContent: 'center',
+            //     alignItems: 'center',
+            //   }}
+            //   enableResizing={false}
+            //   dragAxis="x"
+            //   default={{
+            //     x: x,
+            //     y: 0,
+            //   }}
+            // >
+            <CardHolderPage
+              key={index}
+              id={projectData[item]?.id}
+              name={projectData[item]?.name}
+            />
+            // </Rnd>
+          )
+        })}
+      <div onClick={handleAddListClick} style={{}} className="AddListCss">
+        <GrAdd />
+      </div>
     </div>
   )
 }

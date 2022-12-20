@@ -1,75 +1,62 @@
 import React from 'react'
+import { Droppable, Draggable } from 'react-beautiful-dnd'
+import TaskCardPage from './TaskCardPage'
 
-const CardHolderPage = ({ id, name }) => {
-  const [drag, setDrag] = React.useState(false)
-
-  const handleDragStart = (e) => {
-    setDrag(true)
-
-    e.dataTransfer.effectAllowed = 'move'
-    e.dataTransfer.setData('text/html', this.innerHTML)
-  }
-  const handleDragEnd = (e) => {
-    setDrag(false)
-  }
-  // const handleDragEnter = (e) => {
-  //   setDrag(false)
-  // }
-  // const handleDragLeave = (e) => {
-  //   setDrag(false)
-  // }
-  const handleDragOver = (e) => {
-    e.preventDefault()
-    return false
-  }
-  const handleDrop = (e) => {
-    e.stopPropagation()
-
-    console.log(
-      '🚀 ~ file: CardHolderPage.jsx:30 ~ handleDrop ~ aa',
-      e.dataTransfer.getData('text/html')
-    )
-
-    return false
-  }
-
+const CardHolderPage = ({ column, tasks, index }) => {
   return (
-    <div
-      style={{
-        backgroundColor: 'white',
-        height: '100%',
-        minWidth: '250px',
-        minHeight: '60vh',
-        boxShadow: '2px 2px 5px 5px rgba(0, 0, 0, 0.2)',
-        margin: '1vh 1vw',
-        display: 'flex',
-        justifyContent: 'center',
-        ...(drag
-          ? {
-              opacity: '0.4',
-            }
-          : { opacity: '1' }),
-      }}
-      draggable
-      onDragStart={(e) => handleDragStart(e)}
-      onDragEnd={(e) => handleDragEnd(e)}
-      // onDragEnter={(e) => handleDragEnter(e)}
-      // onDragLeave={(e) => handleDragLeave(e)}
-      onDragOver={(e) => handleDragOver(e)}
-      onDrop={(e) => handleDrop(e)}
-      // onDrag={() => {
-      //   setDrag(true)
-      // }}
-      // onDragEnd={() => {
-      //   setDrag(false)
-      // }}
-      // onDragOver={(event) => {
-      //   console.log(event)
-      // }}
-    >
-      sdfgdfg
-      <div style={{ textTransform: 'uppercase' }}>{name}</div>
-    </div>
+    <Draggable draggableId={column?.id} index={index}>
+      {(provided) => (
+        <div
+          {...provided.draggableProps}
+          ref={provided.innerRef}
+          style={{
+            backgroundColor: 'white',
+            height: '100%',
+            minWidth: '250px',
+            boxShadow: '2px 2px 5px 5px rgba(0, 0, 0, 0.2)',
+            margin: '1vh 1vw',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <div
+            {...provided.dragHandleProps}
+            style={{
+              textTransform: 'uppercase',
+              backgroundColor: 'skyblue',
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              padding: '2px',
+            }}
+          >
+            {column?.name}
+          </div>
+          <Droppable droppableId={column?.id} type="task">
+            {(provided, snapshot) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                style={{
+                  backgroundColor: snapshot.isDraggingOver
+                    ? 'skyblue'
+                    : 'white',
+                  transition: 'background-color 0.2s ease-in-out',
+                  flexGrow: 1,
+                  minHeight: '150px',
+                  width: '100%',
+                }}
+              >
+                {tasks?.map((task, index) => (
+                  <TaskCardPage key={task?.id} task={task} index={index} />
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </div>
+      )}
+    </Draggable>
   )
 }
 

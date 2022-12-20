@@ -14,10 +14,23 @@ const SpecificProjectDetail = () => {
   const [projectData, setProjectData] = React.useState({
     id: id,
     data: {
-      1: { name: 'TO DO' },
-      2: { name: 'IN PROGRESS' },
-      4: { name: 'ON HOLD' },
-      3: { name: 'DONE ✔️' },
+      tasks: {
+        't-1': { id: 't-1', name: 'TO DO' },
+        't-2': { id: 't-2', name: 'IN PROGRESS' },
+        't-3': { id: 't-3', name: 'ON HOLD' },
+        't-4': { id: 't-4', name: 'DONE ✔️' },
+      },
+      columns: {
+        'c-1': {
+          id: 'c-1',
+          name: 'TO DO',
+          taskIds: ['t-1', 't-2', 't-3', 't-4'],
+        },
+        'c-2': { id: 'c-2', name: 'IN PROGRESS', taskIds: [] },
+        'c-3': { id: 'c-3', name: 'ON HOLD', taskIds: [] },
+        'c-4': { id: 'c-4', name: 'DONE ✔️', taskIds: [] },
+      },
+      columnOrder: ['c-1', 'c-2', 'c-4', 'c-3'],
     },
   })
 
@@ -61,7 +74,7 @@ const SpecificProjectDetail = () => {
             {name.substring(1)}
           </div>
           <div className="grayLine" />
-          <ListPage projectData={projectData?.data} />
+          <ListPage projectData={projectData?.data} setProjectData={setProjectData} />
         </div>
       </div>
     </div>

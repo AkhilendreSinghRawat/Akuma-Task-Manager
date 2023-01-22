@@ -21,10 +21,8 @@ const Login = () => {
 
     axios
       .post('/login', {
-        email: 'test@test.com',
-        //emailRef?.current?.value,
-        password: 'Akhilendre@321',
-        //passwordRef?.current?.value,
+        email: emailRef?.current?.value,
+        password: passwordRef?.current?.value,
       })
       .then((res) => {
         if (res.status === 200) {

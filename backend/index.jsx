@@ -20,7 +20,60 @@ mongoose.connect('mongodb://localhost:27017/TaskManager', () => {
 const userModel = require('./Schemas/userSchema.jsx')
 const refreshTokenModel = require('./Schemas/refreshTokenSchema.jsx')
 
-const DATA = { secret: 'Genda Swami' }
+const DATA = [
+  {
+    heading: 'Dashboard',
+    discription:
+      'salkdjflkdsajfldsa;kjfsalkdjfldsakjflksajflkdsajf;lsakjflkdsajflkdsanvkdsadnv;lsan./asndlkfnsav.dsanvlkdsanv',
+    id: 0,
+  },
+  {
+    heading:
+      'Dashboardsadjflkdsajflkdssadkfm;ksdaf;sadfk;sldkf;dslkfajflkdsjflkdsjflksdjf',
+    discription: 'salkdjflkdsajfldsa;kjf',
+    id: 1,
+  },
+  {
+    heading: 'Dashboard',
+    discription: 'salkdjflkdsajfldsa;kjf',
+    id: 2,
+  },
+  {
+    heading: 'Dashboard',
+    discription: 'salkdjflkdsajfldsa;kjf',
+    id: 3,
+  },
+  {
+    heading: 'Dashboard',
+    discription: 'salkdjflkdsajfldsa;kjf',
+    id: 4,
+  },
+  {
+    heading: 'Dashboard',
+    discription: 'salkdjflkdsajfldsa;kjf',
+    id: 5,
+  },
+  {
+    heading: 'Dashboard',
+    discription: 'salkdjflkdsajfldsa;kjf',
+    id: 6,
+  },
+  {
+    heading: 'Dashboard',
+    discription: 'salkdjflkdsajfldsa;kjf',
+    id: 7,
+  },
+  {
+    heading: 'Dashboard',
+    discription: 'salkdjflkdsajfldsa;kjf',
+    id: 8,
+  },
+  {
+    heading: 'akhilendre',
+    discription: 'salkdjflkdsajfldsa;kjf',
+    id: 9,
+  },
+]
 
 const generateAccessToken = (user) => {
   return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' })
@@ -42,7 +95,7 @@ const authenticateToken = (req, res, next) => {
   })
 }
 
-app.get('/data', authenticateToken, (req, res) => {
+app.get('/getProjectsData', authenticateToken, (req, res) => {
   res.json(DATA)
 })
 

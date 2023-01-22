@@ -5,7 +5,7 @@ const ProjectDataCard = ({ projectId, heading, discription }) => {
   const navigate = useNavigate()
 
   const handleProjectClick = () => {
-    navigate(`/home/project/:${projectId}/:${heading}`)
+    navigate(`/home/project/:${heading}/:${projectId}`)
   }
 
   return (

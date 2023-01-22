@@ -1,40 +1,83 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  setIsHomePage,
+  setSelectedCardIndex,
+} from '../../../redux/slices/sideBarSlice'
 import axios from '../../../utils/axios'
+import CreateNewModal from '../../../utils/CreateNewModal'
 import ProjectDataCard from './ProjectDataCard'
 
 const Dashboard = () => {
-  const [projectsData, setProjectsData] = useState([
-    {
-      heading: 'Dashboard',
-      discription:
-        'salkdjflkdsajfldsa;kjfsalkdjfldsakjflksajflkdsajf;lsakjflkdsajflkdsanvkdsadnv;lsan./asndlkfnsav.dsanvlkdsanv',
-      id: 0,
-    },
-    {
-      heading:
-        'Dashboardsadjflkdsajflkdssadkfm;ksdaf;sadfk;sldkf;dslkfajflkdsjflkdsjflksdjf',
-      discription: 'salkdjflkdsajfldsa;kjf',
-      id: 1,
-    },
-    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf', id: 2 },
-    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf', id: 3 },
-    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf', id: 4 },
-    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf', id: 5 },
-    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf', id: 6 },
-    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf', id: 7 },
-    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf', id: 8 },
-    { heading: 'Dashboard', discription: 'salkdjflkdsajfldsa;kjf', id: 9 },
-  ])
+  const dispatch = useDispatch()
+  const createProjectNameRef = React.useRef()
+  const createProjectDiscriptionRef = React.useRef()
+  const { selectedCardIndex } = useSelector((state) => state.sideBarData)
+  const { projectSearchName } = useSelector((state) => state.searchNavbarData)
+  const [showError, setShowError] = React.useState(false)
+  const [filteredData, setFilteredData] = React.useState([])
+  const [projectsData, setProjectsData] = React.useState([])
 
-  // useEffect(() => {
-  //   axios
-  //     .get('/projectsData')
-  //     .then((data) => setProjectsData(data))
-  //     .catch((error) => console.log(error))
-  // }, [])
+  React.useEffect(() => {
+    axios
+      .get('/getProjectsData')
+      .then((data) => setProjectsData(data))
+      .catch((error) => console.log(error))
+    dispatch(setIsHomePage(true))
+    dispatchIndexZero()
+  }, [])
+
+  React.useEffect(() => {
+    if (projectsData.length) {
+      setFilteredData(projectsData)
+    }
+  }, [projectsData])
+
+  React.useEffect(() => {
+    if (projectSearchName === '') {
+      setFilteredData(projectsData)
+    }
+    setFilteredData(
+      projectsData.filter((item) =>
+        item?.heading.toLowerCase().includes(projectSearchName)
+      )
+    )
+  }, [projectSearchName])
+
+  function dispatchIndexZero() {
+    dispatch(setSelectedCardIndex(0))
+  }
+
+  const handleCreateProject = () => {
+    const projectName = createProjectNameRef.current.value.trim()
+    const projectDiscription = createProjectDiscriptionRef.current.value.trim()
+    if (projectName === '' || projectDiscription === '') {
+      setShowError(true)
+      setTimeout(() => {
+        setShowError(false)
+      }, 2000)
+      return
+    }
+  }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+        userSelect: 'none',
+      }}
+    >
+      <CreateNewModal
+        isOpen={selectedCardIndex === 2}
+        onClose={dispatchIndexZero}
+        nameRef={createProjectNameRef}
+        discriptionRef={createProjectDiscriptionRef}
+        handleSubmit={handleCreateProject}
+        showError={showError}
+        name={'Project'}
+      />
       <div className="headingCSS">Dashboard</div>
       <div className="grayLine" />
       <div
@@ -46,7 +89,7 @@ const Dashboard = () => {
           margin: '0 1vw',
         }}
       >
-        {projectsData.map((project, index) => {
+        {filteredData.map((project, index) => {
           return (
             <ProjectDataCard
               key={index}

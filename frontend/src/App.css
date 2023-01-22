@@ -166,6 +166,7 @@ body {
 
 .SideBarContentCardName {
   padding: 1vh 0;
+  user-select: none;
 }
 
 .colorHightlightCardContent {
@@ -237,6 +238,68 @@ body {
 
 .AddListCss:hover {
   background-color: #ddd;
+}
+
+.ticketCopy {
+  min-width: 20;
+  opacity: 0.5;
+}
+
+.ticketCopy:hover {
+  opacity: 1;
+}
+
+.ticketClicked {
+  color: green;
+}
+
+.profileButton {
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+}
+
+.editProfile {
+  visibility: hidden;
+  padding: 5px;
+  cursor: pointer;
+  display: flex;
+  align-self: end;
+}
+
+.profileContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 2;
+  margin: 10px;
+}
+
+.profileDataContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px;
+  flex: 5;
+}
+
+.profileContainer:hover + .profileDataContainer {
+  animation: profileContainerAnimation 2s normal;
+  flex: 4;
+}
+
+.profileContainer:hover .editProfile {
+  visibility: visible;
+}
+
+@keyframes profileContainerAnimation {
+  from {
+    flex: 5;
+  }
+  to {
+    flex: 4;
+  }
 }
 
 @media only screen and (max-width: 750px) {

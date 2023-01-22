@@ -1,21 +1,18 @@
 import React from 'react'
 
+import Dashboard from '../../pages/Home/DashBoard.jsx'
+import ProfilePage from '../Profile/index.jsx'
+
 import Navbar from '../../utils/Navbar'
 import SideBar from './SideBar'
-import Dashboard from './DashBoard.jsx'
 import { useSelector } from 'react-redux'
 
-const SideBarContent = [
-  {
-    name: 'Dashboard',
-    component: <Dashboard />,
-  },
-  { name: 'Profile', component: <Dashboard /> },
-  {
-    name: 'Create a new project',
-    component: <Dashboard />,
-  },
-]
+const SideBarContent = {
+  0: <Dashboard />,
+  1: <ProfilePage />,
+  2: <Dashboard />,
+  3: <Dashboard />,
+}
 
 const Home = () => {
   const { selectedCardIndex } = useSelector((state) => state.sideBarData)
@@ -45,7 +42,7 @@ const Home = () => {
             height: '100%',
           }}
         >
-          {SideBarContent[selectedCardIndex]?.component}
+          {SideBarContent[selectedCardIndex]}
         </div>
       </div>
     </div>

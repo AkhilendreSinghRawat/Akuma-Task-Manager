@@ -4,13 +4,23 @@ import Navbar from '../../../utils/Navbar'
 import SideBar from '../SideBar'
 import ListPage from './ListPage'
 
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { BiArrowBack } from 'react-icons/bi'
+import {
+  setIsHomePage,
+  setSelectedCardIndex,
+} from '../../../redux/slices/sideBarSlice'
+import CreateNewModal from '../../../utils/CreateNewModal'
 
 const SpecificProjectDetail = () => {
   const { id, name } = useParams()
+  const dispatch = useDispatch()
   const navigate = useNavigate()
-
+  const createTaskNameRef = React.useRef()
+  const createTaskDiscriptionRef = React.useRef()
+  const { selectedCardIndex } = useSelector((state) => state.sideBarData)
+  const [showError, setShowError] = React.useState(false)
   const [projectData, setProjectData] = React.useState({
     id: id,
     data: {
@@ -30,12 +40,32 @@ const SpecificProjectDetail = () => {
         'c-3': { id: 'c-3', name: 'ON HOLD', taskIds: [] },
         'c-4': { id: 'c-4', name: 'DONE ✔️', taskIds: [] },
       },
-      columnOrder: ['c-1', 'c-2', 'c-4', 'c-3'],
+      columnOrder: ['c-1', 'c-2', 'c-3', 'c-4'],
     },
   })
 
+  React.useEffect(() => {
+    dispatch(setIsHomePage(false))
+  }, [])
+
   const handleBackArrowClick = () => {
     navigate('/home')
+  }
+
+  const dispatchIndexZero = () => {
+    dispatch(setSelectedCardIndex(0))
+  }
+
+  const handleCreateTask = () => {
+    const taskName = createTaskNameRef.current.value.trim()
+    const taskDiscription = createTaskDiscriptionRef.current.value.trim()
+    if (taskName === '' || taskDiscription === '') {
+      setShowError(true)
+      setTimeout(() => {
+        setShowError(false)
+      }, 2000)
+      return
+    }
   }
 
   return (
@@ -64,6 +94,15 @@ const SpecificProjectDetail = () => {
             flexDirection: 'column',
           }}
         >
+          <CreateNewModal
+            isOpen={selectedCardIndex === 3}
+            onClose={dispatchIndexZero}
+            nameRef={createTaskNameRef}
+            discriptionRef={createTaskDiscriptionRef}
+            handleSubmit={handleCreateTask}
+            showError={showError}
+            name={'Task'}
+          />
           <div style={{ display: 'flex' }} className="headingCSS">
             <div
               onClick={handleBackArrowClick}
@@ -74,7 +113,10 @@ const SpecificProjectDetail = () => {
             {name.substring(1)}
           </div>
           <div className="grayLine" />
-          <ListPage projectData={projectData?.data} setProjectData={setProjectData} />
+          <ListPage
+            projectData={projectData?.data}
+            setProjectData={setProjectData}
+          />
         </div>
       </div>
     </div>

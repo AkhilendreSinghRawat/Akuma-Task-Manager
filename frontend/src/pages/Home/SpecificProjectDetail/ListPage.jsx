@@ -1,13 +1,10 @@
 import React from 'react'
 
-import { GrAdd } from 'react-icons/gr'
-import { DragDropContext, Droppable } from 'react-beautiful-dnd'
+import { DragDropContext } from 'react-beautiful-dnd'
 
 import CardHolderPage from './CardHolderPage'
 
 const ListPage = ({ projectData, setProjectData }) => {
-  const handleAddListClick = () => {}
-
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result
 
@@ -75,56 +72,31 @@ const ListPage = ({ projectData, setProjectData }) => {
     <div
       className="ListPageContainer"
       style={{
-        backgroundColor: '#dddd',
         maxWidth: '83.3vw',
         display: 'flex',
-        overflowX: 'scroll',
+        overflow: 'auto',
+        maxHeight: '70vh',
+        borderBottom: '1px solid black',
       }}
     >
       <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable
-          droppableId="all-columns"
-          direction="horizontal"
-          type="column"
+        <div
+          style={{
+            display: 'flex',
+            height: '100%',
+          }}
         >
-          {(provided) => (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              style={{
-                display: 'flex',
-                height: '100%',
-              }}
-            >
-              {projectData?.columnOrder.map((columnId, index) => {
-                const column = projectData?.columns[columnId]
-                const tasks = column?.taskIds?.map(
-                  (taskId) => projectData?.tasks[taskId]
-                )
-                return (
-                  <CardHolderPage
-                    key={column?.id}
-                    index={index}
-                    column={column}
-                    tasks={tasks}
-                  />
-                )
-              })}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
+          {projectData?.columnOrder.map((columnId, index) => {
+            const column = projectData?.columns[columnId]
+            const tasks = column?.taskIds?.map(
+              (taskId) => projectData?.tasks[taskId]
+            )
+            return (
+              <CardHolderPage key={column?.id} column={column} tasks={tasks} />
+            )
+          })}
+        </div>
       </DragDropContext>
-      <div
-        onClick={handleAddListClick}
-        style={{
-          display: 'flex',
-          alignSelf: 'center',
-        }}
-        className="AddListCss"
-      >
-        <GrAdd />
-      </div>
     </div>
   )
 }

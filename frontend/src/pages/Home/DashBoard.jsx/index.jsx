@@ -19,10 +19,19 @@ const Dashboard = () => {
   const [projectsData, setProjectsData] = React.useState([])
 
   React.useEffect(() => {
-    axios
-      .get('/getProjectsData')
-      .then((data) => setProjectsData(data))
-      .catch((error) => console.log(error))
+    const token = JSON.parse(localStorage.getItem('token'))
+    if (token?.accessToken) {
+      axios
+        .get('/getProjectsData', {
+          headers: { authorization: `Bearer ${token?.accessToken}` },
+        })
+        .then((response) => {
+          setProjectsData(response.data)
+        })
+        .catch((error) => console.log(error))
+    } else {
+      //@TODO handle no access token
+    }
     dispatch(setIsHomePage(true))
     dispatchIndexZero()
   }, [])

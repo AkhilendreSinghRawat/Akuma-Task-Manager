@@ -136,15 +136,15 @@ app.post("/addNewProject", authenticateToken, async (req, res) => {
 
 app.get("/getProjectsData", authenticateToken, async (req, res) => {
   try {
-    const data = await dataModel.find();
-    console.log("Data model ", data);
+    const user = await userModel.findOne({ email: req.user.email });
+    const data = await dataModel.find({ user });
 
     return res.json(data);
   } catch (err) {
-    console.error("Error while adding new project: ", err);
+    console.error("Error while fetching project data: ", err);
     return res
       .status(500)
-      .json({ message: "Error while adding new project:", error: err });
+      .json({ message: "Error while fetching project data:", error: err });
   }
 });
 

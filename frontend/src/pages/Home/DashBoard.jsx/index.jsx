@@ -26,9 +26,7 @@ const Dashboard = () => {
         .get("/getProjectsData", {
           headers: { authorization: `Bearer ${token?.accessToken}` },
         })
-        .then((response) => {
-          setProjectsData(response.data);
-        })
+        .then((response) => setProjectsData(response.data))
         .catch((error) => console.log(error));
     } else {
       //@TODO handle no access token
@@ -121,11 +119,11 @@ const Dashboard = () => {
           margin: "0 1vw",
         }}
       >
-        {filteredData.map((project, index) => {
+        {filteredData.map(({ data: project }, index) => {
           return (
             <ProjectDataCard
               key={index}
-              projectId={project?.id}
+              projectId={project?._id}
               heading={project?.heading}
               discription={project?.discription}
             />

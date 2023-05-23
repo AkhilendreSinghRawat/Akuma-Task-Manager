@@ -10,6 +10,11 @@ const dataFormatSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  taskData:{
+    tasks: {
+      [String]:{id: String,name: String}
+    }
+  }
 });
 
 const dataSchema = new mongoose.Schema({

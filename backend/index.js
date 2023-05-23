@@ -13,68 +13,13 @@ app.use(
 );
 
 const mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost:27017/TaskManager", () => {
+mongoose.connect("mongodb://0.0.0.0:27017/TaskManager").then(() => {
   console.log("Connected to MongoDB");
 });
 
 const userModel = require("./Schemas/userSchema.js");
 const dataModel = require("./Schemas/dataSchema.js");
 const refreshTokenModel = require("./Schemas/refreshTokenSchema.js");
-
-const DATA = [
-  {
-    heading: "Dashboard",
-    discription:
-      "salkdjflkdsajfldsa;kjfsalkdjfldsakjflksajflkdsajf;lsakjflkdsajflkdsanvkdsadnv;lsan./asndlkfnsav.dsanvlkdsanv",
-    id: 0,
-  },
-  {
-    heading:
-      "Dashboardsadjflkdsajflkdssadkfm;ksdaf;sadfk;sldkf;dslkfajflkdsjflkdsjflksdjf",
-    discription: "salkdjflkdsajfldsa;kjf",
-    id: 1,
-  },
-  {
-    heading: "Dashboard",
-    discription: "salkdjflkdsajfldsa;kjf",
-    id: 2,
-  },
-  {
-    heading: "Dashboard",
-    discription: "salkdjflkdsajfldsa;kjf",
-    id: 3,
-  },
-  {
-    heading: "Dashboard",
-    discription: "salkdjflkdsajfldsa;kjf",
-    id: 4,
-  },
-  {
-    heading: "Dashboard",
-    discription: "salkdjflkdsajfldsa;kjf",
-    id: 5,
-  },
-  {
-    heading: "Dashboard",
-    discription: "salkdjflkdsajfldsa;kjf",
-    id: 6,
-  },
-  {
-    heading: "Dashboard",
-    discription: "salkdjflkdsajfldsa;kjf",
-    id: 7,
-  },
-  {
-    heading: "Dashboard",
-    discription: "salkdjflkdsajfldsa;kjf",
-    id: 8,
-  },
-  {
-    heading: "akhilendre",
-    discription: "salkdjflkdsajfldsa;kjf",
-    id: 9,
-  },
-];
 
 const generateAccessToken = (user) => {
   return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1d" });
@@ -114,17 +59,12 @@ app.post("/addNewProject", authenticateToken, async (req, res) => {
         data: { heading, discription },
       });
 
-      data.save((err, result) => {
-        if (err) {
-          console.error("Error on saving project data: ", err);
-          return res
-            .status(409)
-            .json({ message: "Error while saving token", error: err });
-        }
+      const result = await data.save();
+      console.log(`New Project Created 🎉: ${result.data.heading}`);
 
-        console.info("Result on saving project data: ", result);
-        return res.status(200).json({ message: "New Project Created 🎉" });
-      });
+      return res
+        .status(200)
+        .json({ message: `New Project Created 🎉: ${result.data.heading}` });
     }
   } catch (err) {
     console.error("Error while adding new project: ", err);

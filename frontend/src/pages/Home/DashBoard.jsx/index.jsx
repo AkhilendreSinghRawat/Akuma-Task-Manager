@@ -29,7 +29,7 @@ const Dashboard = () => {
         .then((response) => setProjectsData(response.data))
         .catch((error) => console.log(error));
     } else {
-      //@TODO handle no access token
+      //@TODO: handle no access token
     }
     dispatch(setIsHomePage(true));
     dispatchIndexZero();
@@ -56,7 +56,7 @@ const Dashboard = () => {
     dispatch(setSelectedCardIndex(0));
   }
 
-  const handleCreateProject = () => {
+  const handleCreateProject = async () => {
     const projectName = createProjectNameRef.current.value.trim();
     const projectDiscription = createProjectDiscriptionRef.current.value.trim();
     if (projectName === "" || projectDiscription === "") {
@@ -66,11 +66,10 @@ const Dashboard = () => {
       }, 2000);
       return;
     }
-
-    const token = JSON.parse(localStorage.getItem("token"));
-    if (token?.accessToken) {
-      axios
-        .post(
+    try {
+      const token = JSON.parse(localStorage.getItem("token"));
+      if (token?.accessToken) {
+        const response = await axios.post(
           "/addNewProject",
           {
             heading: projectName,
@@ -79,14 +78,15 @@ const Dashboard = () => {
           {
             headers: { authorization: `Bearer ${token?.accessToken}` },
           }
-        )
-        .then((response) => {
-          if (response.status === 200) {
-            toast.success("Project Created");
-            dispatchIndexZero();
-          }
-        })
-        .catch((error) => console.log(error));
+        );
+        if (response.status === 200) {
+          toast.success(response.data?.message);
+        }
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message);
+    } finally {
+      location.reload();
     }
   };
 

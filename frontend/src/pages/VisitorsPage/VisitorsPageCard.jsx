@@ -1,18 +1,16 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const VisitorsPageCard = ({
-  textHeading = '',
-  textDiscription = '',
+  textHeading = "",
+  textDiscription = "",
   listPoints = false,
 }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
     <div
-      onClick={() => {
-        navigate('/signin')
-      }}
+      onClick={() => navigate("/signin")}
       className="visitorsPageCardContainer"
     >
       <div className="visitorsPageCardTextHeading">{textHeading}</div>
@@ -27,7 +25,7 @@ const VisitorsPageCard = ({
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default VisitorsPageCard
+export default VisitorsPageCard;

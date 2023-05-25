@@ -1,50 +1,46 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState } from "react";
 
-import { toast } from 'react-toastify'
-import { Dna } from 'react-loader-spinner'
-import { useNavigate } from 'react-router-dom'
+import { toast } from "react-toastify";
+import { Dna } from "react-loader-spinner";
+import { useNavigate } from "react-router-dom";
 
-import axios from '../../utils/axios'
-import Navbar from '../../utils/Navbar'
-import Footer from '../../utils/Footer'
+import axios from "../../utils/axios";
+import Navbar from "../../utils/Navbar";
+import Footer from "../../utils/Footer";
 
 const Login = () => {
-  const emailRef = useRef()
-  const passwordRef = useRef()
-  const [loader, setLoader] = useState(false)
+  const emailRef = useRef();
+  const passwordRef = useRef();
+  const [loader, setLoader] = useState(false);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    setLoader(true)
-
-    axios
-      .post('/login', {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoader(true);
+    try {
+      const res = await axios.post("/login", {
         email: emailRef?.current?.value,
         password: passwordRef?.current?.value,
-      })
-      .then((res) => {
-        if (res.status === 200) {
-          localStorage.setItem(
-            'token',
-            JSON.stringify({
-              accessToken: res?.data?.accessToken,
-              refreshToken: res?.data?.refreshToken,
-            })
-          )
-          navigate('/home')
-          toast.success('Successfully Logged In')
-        } else {
-          toast.error('Something went wrong!')
-        }
-        setLoader(false)
-      })
-      .catch((err) => {
-        toast.error(err?.response?.data?.message)
-        setLoader(false)
-      })
-  }
+      });
+
+      if (res.status === 200) {
+        localStorage.setItem(
+          "token",
+          JSON.stringify({
+            accessToken: res?.data?.accessToken,
+            refreshToken: res?.data?.refreshToken,
+          })
+        );
+        navigate("/home");
+        toast.success("Successfully Logged In");
+      }
+    } catch (err) {
+      toast.error(err?.response?.data?.message);
+    } finally {
+      setLoader(false);
+    }
+  };
 
   return (
     <div className="componenetHeight">
@@ -57,7 +53,7 @@ const Login = () => {
             id="email"
             type="email"
             required
-            value={'test@test.com'}
+            value={"test@test.com"}
             ref={emailRef}
           />
           <label>Password</label>
@@ -66,7 +62,7 @@ const Login = () => {
             id="password"
             type="password"
             required
-            value={'Akhilendre@321'}
+            value={"Akhilendre@321"}
             ref={passwordRef}
           />
           {loader ? (
@@ -76,10 +72,10 @@ const Login = () => {
               width="100"
               ariaLabel="dna-loading"
               wrapperStyle={{
-                width: '100%',
-                backgroundColor: 'darkcyan',
-                borderRadius: '0.5vw',
-                margin: '1vh 0',
+                width: "100%",
+                backgroundColor: "darkcyan",
+                borderRadius: "0.5vw",
+                margin: "1vh 0",
               }}
               wrapperClass="dna-wrapper"
             />
@@ -94,7 +90,7 @@ const Login = () => {
       </div>
       <Footer />
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

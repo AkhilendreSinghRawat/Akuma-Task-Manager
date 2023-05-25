@@ -8,9 +8,11 @@ import axios from "../../../utils/axios";
 import CreateNewModal from "../../../utils/CreateNewModal";
 import ProjectDataCard from "./ProjectDataCard";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const createProjectNameRef = React.useRef();
   const createProjectDiscriptionRef = React.useRef();
   const { selectedCardIndex } = useSelector((state) => state.sideBarData);
@@ -20,17 +22,7 @@ const Dashboard = () => {
   const [projectsData, setProjectsData] = React.useState([]);
 
   React.useEffect(() => {
-    const token = JSON.parse(localStorage.getItem("token"));
-    if (token?.accessToken) {
-      axios
-        .get("/getProjectsData", {
-          headers: { authorization: `Bearer ${token?.accessToken}` },
-        })
-        .then((response) => setProjectsData(response.data))
-        .catch((error) => console.log(error));
-    } else {
-      //@TODO: handle no access token
-    }
+    getProjectsData();
     dispatch(setIsHomePage(true));
     dispatchIndexZero();
   }, []);
@@ -52,9 +44,24 @@ const Dashboard = () => {
     );
   }, [projectSearchName]);
 
-  function dispatchIndexZero() {
-    dispatch(setSelectedCardIndex(0));
-  }
+  const getProjectsData = async () => {
+    const token = JSON.parse(localStorage.getItem("token"));
+    if (token?.accessToken) {
+      try {
+        const res = await axios.get("/getProjectsData", {
+          headers: { authorization: `Bearer ${token?.accessToken}` },
+        });
+
+        if (res.status === 200) setProjectsData(res.data);
+      } catch (err) {
+        toast.error(err?.response?.data?.message);
+      }
+    } else {
+      navigate("/signin");
+    }
+  };
+
+  const dispatchIndexZero = () => dispatch(setSelectedCardIndex(0));
 
   const handleCreateProject = async () => {
     const projectName = createProjectNameRef.current.value.trim();
@@ -80,13 +87,14 @@ const Dashboard = () => {
           }
         );
         if (response.status === 200) {
+          getProjectsData();
           toast.success(response.data?.message);
         }
       }
     } catch (error) {
       toast.error(error.response?.data?.message);
     } finally {
-      location.reload();
+      dispatchIndexZero();
     }
   };
 

@@ -1,36 +1,40 @@
-import React from 'react'
-
-import { toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom'
-import reactLogo from '../assets/react.svg'
-import axios from './axios'
-import { useDispatch, useSelector } from 'react-redux'
-import { setProjectSearchName } from '../redux/slices/searchNavbarSlice'
+import React from "react";
+import { useAxios } from "./api";
+import { toast } from "react-toastify";
+import reactLogo from "../assets/react.svg";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setProjectSearchName } from "../redux/slices/searchNavbarSlice";
 
 const Navbar = ({ visitorsPage = false }) => {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { selectedCardIndex, isHomePage } = useSelector(
     (state) => state.sideBarData
-  )
+  );
 
-  const user = localStorage.getItem('token')
+  const user = localStorage.getItem("token");
   const handleLogout = () => {
-    localStorage.clear()
-    // axios.delete('/logout')
-    toast.success('Successfully Logged out')
-    navigate('/signin')
-  }
+    useAxios({
+      navigate,
+      path: "logout",
+      type: "delete",
+      successCb: () => {
+        localStorage.clear();
+        navigate("/signin");
+      },
+    });
+  };
 
   const handleInputChange = (e) => {
-    dispatch(setProjectSearchName(e.target.value.trim().toLowerCase()))
-  }
+    dispatch(setProjectSearchName(e.target.value.trim().toLowerCase()));
+  };
 
   return (
     <div className="navbarContainer">
       <div
         onClick={() => {
-          navigate('/')
+          navigate("/");
         }}
         className="navbarLeftSideContainer"
       >
@@ -38,14 +42,14 @@ const Navbar = ({ visitorsPage = false }) => {
         <div className="navbarHeading">Akuma</div>
       </div>
       {isHomePage && selectedCardIndex === 0 && !visitorsPage && (
-        <div style={{ display: 'flex', flex: 1 }}>
+        <div style={{ display: "flex", flex: 1 }}>
           <input
-            type={'search'}
+            type={"search"}
             style={{
               flex: 1,
-              border: '1px solid lightgray',
-              height: '30px',
-              outline: 'none',
+              border: "1px solid lightgray",
+              height: "30px",
+              outline: "none",
             }}
             onChange={handleInputChange}
           />
@@ -55,17 +59,17 @@ const Navbar = ({ visitorsPage = false }) => {
         {user ? (
           <div
             onClick={() => {
-              visitorsPage ? navigate('/home') : handleLogout()
+              visitorsPage ? navigate("/home") : handleLogout();
             }}
             className="button"
           >
-            {visitorsPage ? 'Get Started!' : 'Sign Out'}
+            {visitorsPage ? "Get Started!" : "Sign Out"}
           </div>
         ) : (
           <>
             <div
               onClick={() => {
-                navigate('/signin')
+                navigate("/signin");
               }}
               className="button"
             >
@@ -73,7 +77,7 @@ const Navbar = ({ visitorsPage = false }) => {
             </div>
             <div
               onClick={() => {
-                navigate('/signup')
+                navigate("/signup");
               }}
               className="button"
             >
@@ -83,7 +87,7 @@ const Navbar = ({ visitorsPage = false }) => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

@@ -56,17 +56,7 @@ const SpecificProjectDetail = () => {
     dispatch(setSelectedCardIndex(0));
   };
 
-  const handleCreateTask = () => {
-    const taskName = createTaskNameRef.current.value.trim();
-    const taskDiscription = createTaskDiscriptionRef.current.value.trim();
-    if (taskName === "" || taskDiscription === "") {
-      setShowError(true);
-      setTimeout(() => {
-        setShowError(false);
-      }, 2000);
-      return;
-    }
-  };
+  const handleCreateTask = (heading, discription) => {};
 
   return (
     <div
@@ -97,10 +87,7 @@ const SpecificProjectDetail = () => {
           <CreateNewModal
             isOpen={selectedCardIndex === 3}
             onClose={dispatchIndexZero}
-            nameRef={createTaskNameRef}
-            discriptionRef={createTaskDiscriptionRef}
             handleSubmit={handleCreateTask}
-            showError={showError}
             name={"Task"}
           />
           <div style={{ display: "flex" }} className="headingCSS">

@@ -1,4 +1,4 @@
-import axios from "./axios";
+import axios from "../utils/axios";
 import { toast } from "react-toastify";
 
 const getData = ({ path, type, accessToken, payload }) => {
@@ -20,6 +20,7 @@ const getData = ({ path, type, accessToken, payload }) => {
 
   return axios.get(`/${path}`, {
     headers: { authorization: `Bearer ${accessToken}` },
+    params: payload,
   });
 };
 

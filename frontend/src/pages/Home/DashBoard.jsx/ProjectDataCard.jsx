@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import CreateNewModal from "../../../utils/CreateNewModal";
-import { useAxios } from "../../../utils/api";
+import { useAxios } from "../../../hooks/useAxios";
 
 const ProjectDataCard = ({
   projectId,

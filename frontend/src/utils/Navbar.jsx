@@ -1,14 +1,16 @@
 import React from "react";
-import { useAxios } from "./api";
-import { toast } from "react-toastify";
 import reactLogo from "../assets/react.svg";
+import { useAxios } from "../hooks/useAxios";
 import { useNavigate } from "react-router-dom";
+import { useDebounce } from "../hooks/useDebounce";
 import { useDispatch, useSelector } from "react-redux";
 import { setProjectSearchName } from "../redux/slices/searchNavbarSlice";
 
 const Navbar = ({ visitorsPage = false }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const debounce = useDebounce();
+
   const { selectedCardIndex, isHomePage } = useSelector(
     (state) => state.sideBarData
   );
@@ -26,18 +28,13 @@ const Navbar = ({ visitorsPage = false }) => {
     });
   };
 
-  const handleInputChange = (e) => {
-    dispatch(setProjectSearchName(e.target.value.trim().toLowerCase()));
-  };
+  const handleInputChange = debounce((searchQuery) => {
+    dispatch(setProjectSearchName(searchQuery));
+  }, 300);
 
   return (
     <div className="navbarContainer">
-      <div
-        onClick={() => {
-          navigate("/");
-        }}
-        className="navbarLeftSideContainer"
-      >
+      <div onClick={() => navigate("/")} className="navbarLeftSideContainer">
         <img src={reactLogo} className="logo react" alt="React logo" />
         <div className="navbarHeading">Akuma</div>
       </div>
@@ -51,7 +48,9 @@ const Navbar = ({ visitorsPage = false }) => {
               height: "30px",
               outline: "none",
             }}
-            onChange={handleInputChange}
+            onChange={(e) =>
+              handleInputChange(e.target.value.trim().toLowerCase())
+            }
           />
         </div>
       )}

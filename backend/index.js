@@ -120,9 +120,17 @@ app.post("/addNewProject", authenticateToken, async (req, res) => {
 });
 
 app.get("/getProjectsData", authenticateToken, async (req, res) => {
+  const { searchValue } = req.query;
   try {
     const user = await userModel.findOne({ email: req.user.email });
     const data = await dataModel.find({ user });
+
+    if (searchValue)
+      return res.json(
+        data.filter((item) =>
+          item.data.heading.toLowerCase().includes(searchValue)
+        )
+      );
 
     return res.json(data);
   } catch (err) {

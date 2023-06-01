@@ -50,7 +50,7 @@ const Signup = () => {
 
   return (
     <div className="componenetHeight">
-      <Navbar />
+      <Navbar visitorsPage />
       <div className="FormContainer">
         <form className="Form" onSubmit={handleSubmit}>
           <label>Email</label>

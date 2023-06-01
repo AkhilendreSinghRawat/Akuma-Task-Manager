@@ -6,44 +6,21 @@ import {
 } from "../../../redux/slices/sideBarSlice";
 import CreateNewModal from "../../../utils/CreateNewModal";
 import ProjectDataCard from "./ProjectDataCard";
-import { useAxios } from "../../../utils/api";
 import { useNavigate } from "react-router";
+import { useAxios } from "../../../hooks/useAxios";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { selectedCardIndex } = useSelector((state) => state.sideBarData);
   const { projectSearchName } = useSelector((state) => state.searchNavbarData);
-  const [filteredData, setFilteredData] = useState([]);
   const [projectsData, setProjectsData] = useState([]);
-
-  useEffect(() => {
-    getProjectsData();
-    dispatch(setIsHomePage(true));
-    dispatchIndexZero();
-  }, []);
-
-  useEffect(() => {
-    if (projectsData.length) {
-      setFilteredData(projectsData);
-    }
-  }, [projectsData]);
-
-  useEffect(() => {
-    if (projectSearchName === "") {
-      setFilteredData(projectsData);
-    }
-    setFilteredData(
-      projectsData.filter((item) =>
-        item?.heading.toLowerCase().includes(projectSearchName)
-      )
-    );
-  }, [projectSearchName]);
 
   const getProjectsData = async () => {
     useAxios({
       navigate,
       path: "getProjectsData",
+      payload: { searchValue: projectSearchName },
       successCb: (res) => setProjectsData(res.data),
     });
   };
@@ -63,6 +40,12 @@ const Dashboard = () => {
       finallyCb: dispatchIndexZero,
     });
   };
+
+  useEffect(() => {
+    getProjectsData();
+    dispatch(setIsHomePage(true));
+    dispatchIndexZero();
+  }, [projectSearchName]);
 
   return (
     <div
@@ -90,7 +73,7 @@ const Dashboard = () => {
           margin: "0 1vw",
         }}
       >
-        {filteredData.map(({ data: project, _id }, index) => {
+        {projectsData.map(({ data: project, _id }, index) => {
           return (
             <ProjectDataCard
               key={index}

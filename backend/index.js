@@ -13,6 +13,7 @@ app.use(
 );
 
 const mongoose = require("mongoose");
+mongoose.set("strictQuery", false);
 mongoose.connect("mongodb://0.0.0.0:27017/TaskManager").then(() => {
   console.log("Connected to MongoDB");
 });
@@ -97,7 +98,7 @@ app.post("/addNewProject", authenticateToken, async (req, res) => {
     const user = await userModel.findOne({ email: req.user.email });
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    const data = dataModel.findOne({ heading });
+    const data = await dataModel.findOne({ heading });
     if (data) return res.status(403).json({ message: "Project already exist" });
 
     const newData = new dataModel({

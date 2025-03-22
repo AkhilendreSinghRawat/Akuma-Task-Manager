@@ -25,7 +25,7 @@ const Signup = () => {
 
     setLoader(true);
     try {
-      const res = await axios.post("/register", {
+      const res = await axios.post("/auth/register", {
         email: emailRef?.current?.value,
         password: passwordRef?.current?.value,
       });

@@ -18,9 +18,9 @@ mongoose.connect("mongodb://0.0.0.0:27017/TaskManager").then(() => {
   console.log("Connected to MongoDB");
 });
 
-const userModel = require("./Schemas/userSchema.js");
-const dataModel = require("./Schemas/dataSchema.js");
-const refreshTokenModel = require("./Schemas/refreshTokenSchema.js");
+const userModel = require("./models/userModel.js");
+const projectsModel = require("./models/projectModel.js");
+const refreshTokenModel = require("./models/refreshTokenModel.js");
 
 //Authorization
 const generateAccessToken = (user) =>
@@ -88,22 +88,22 @@ app.post("/token", async (req, res) => {
 
 //project api's
 app.post("/addNewProject", authenticateToken, async (req, res) => {
-  const { heading, discription } = req.body;
-  if (!heading || !discription)
+  const { heading, description } = req.body;
+  if (!heading || !description)
     return res
       .status(400)
-      .json({ message: "Heading and Discription are requried!" });
+      .json({ message: "Heading and Description are requried!" });
 
   try {
     const user = await userModel.findOne({ email: req.user.email });
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    const data = await dataModel.findOne({ heading });
+    const data = await projectsModel.findOne({ heading });
     if (data) return res.status(403).json({ message: "Project already exist" });
 
-    const newData = new dataModel({
+    const newData = new projectsModel({
       user,
-      data: { heading, discription },
+      data: { heading, description },
     });
 
     const result = await newData.save();
@@ -124,7 +124,7 @@ app.get("/getProjectsData", authenticateToken, async (req, res) => {
   const { searchValue } = req.query;
   try {
     const user = await userModel.findOne({ email: req.user.email });
-    const data = await dataModel.find({ user });
+    const data = await projectsModel.find({ user });
 
     if (searchValue)
       return res.json(
@@ -143,19 +143,19 @@ app.get("/getProjectsData", authenticateToken, async (req, res) => {
 });
 
 app.put("/editProject", authenticateToken, async (req, res) => {
-  const { _id, heading, discription } = req.body;
+  const { _id, heading, description } = req.body;
   if (!_id) return res.status(400).json({ message: "Invalid Id" });
 
-  if (!heading || !discription)
+  if (!heading || !description)
     return res
       .status(400)
-      .json({ message: "Heading and Discription are requried!" });
+      .json({ message: "Heading and Description are requried!" });
 
   try {
     const user = await userModel.findOne({ email: req.user.email });
-    const data = await dataModel.findOneAndUpdate(
+    const data = await projectsModel.findOneAndUpdate(
       { user, _id },
-      { data: { heading, discription } }
+      { data: { heading, description } }
     );
     if (!data) return res.status(404).json({ message: "Project not found" });
     console.log("Project Edited Successfully: ", data);
@@ -177,7 +177,7 @@ app.delete("/deleteProject", authenticateToken, async (req, res) => {
 
   try {
     const user = await userModel.findOne({ email: req.user.email });
-    const result = await dataModel.findOneAndDelete({
+    const result = await projectsModel.findOneAndDelete({
       _id,
     });
     if (!result) return res.status(404).json({ message: "Project not found" });

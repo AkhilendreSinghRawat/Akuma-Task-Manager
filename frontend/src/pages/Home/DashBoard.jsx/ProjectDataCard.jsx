@@ -7,7 +7,7 @@ import { useAxios } from "../../../hooks/useAxios";
 const ProjectDataCard = ({
   projectId,
   heading,
-  discription,
+  description,
   getProjectsData,
 }) => {
   const navigate = useNavigate();
@@ -15,15 +15,15 @@ const ProjectDataCard = ({
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
   const handleProjectClick = () => {
-    navigate(`/home/project/:${heading}/:${projectId}`);
+    navigate(`/home/project/${projectId}`);
   };
 
-  const handleEditProjectDetails = (heading, discription) => {
+  const handleEditProjectDetails = (heading, description) => {
     useAxios({
-      path: "editProject",
+      path: "projects/editProject",
       type: "put",
       navigate,
-      payload: { _id: projectId, heading, discription },
+      payload: { _id: projectId, heading, description },
       successCb: getProjectsData,
       finallyCb: () => setEditing(false),
     });
@@ -31,7 +31,7 @@ const ProjectDataCard = ({
 
   const handleDeleteProject = () => {
     useAxios({
-      path: "deleteProject",
+      path: "projects/deleteProject",
       type: "delete",
       navigate,
       payload: { _id: projectId },
@@ -70,7 +70,7 @@ const ProjectDataCard = ({
       >
         <div className="ProjectDataCardDataContainer">
           <div className="ProjectDataCardHeading">{heading}</div>
-          <div className="ProjectDataCardDiscription">{discription}</div>
+          <div className="ProjectDataCardDiscription">{description}</div>
         </div>
         <div className="ProjectDataCardIconContainer">
           <AiFillEdit

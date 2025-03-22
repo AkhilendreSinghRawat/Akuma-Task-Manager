@@ -19,7 +19,7 @@ const Dashboard = () => {
   const getProjectsData = async () => {
     useAxios({
       navigate,
-      path: "getProjectsData",
+      path: "projects/getProjectsData",
       payload: { searchValue: projectSearchName },
       successCb: (res) => setProjectsData(res.data),
     });
@@ -27,14 +27,14 @@ const Dashboard = () => {
 
   const dispatchIndexZero = () => dispatch(setSelectedCardIndex(0));
 
-  const handleCreateProject = (heading, discription) => {
+  const handleCreateProject = (heading, description) => {
     useAxios({
-      path: "addNewProject",
+      path: "projects/addNewProject",
       type: "post",
       navigate,
       payload: {
         heading,
-        discription,
+        description,
       },
       successCb: getProjectsData,
       finallyCb: dispatchIndexZero,
@@ -73,13 +73,12 @@ const Dashboard = () => {
           margin: "0 1vw",
         }}
       >
-        {projectsData.map(({ data: project, _id }, index) => {
+        {projectsData.map((data, index) => {
           return (
             <ProjectDataCard
               key={index}
-              projectId={_id}
-              heading={project?.heading}
-              discription={project?.discription}
+              projectId={data?._id}
+              {...data}
               getProjectsData={getProjectsData}
             />
           );

@@ -12,9 +12,10 @@ import {
   setSelectedCardIndex,
 } from "../../../redux/slices/sideBarSlice";
 import CreateNewModal from "../../../utils/CreateNewModal";
+import { useAxios } from "../../../hooks/useAxios";
 
 const SpecificProjectDetail = () => {
-  const { id, name } = useParams();
+  const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const createTaskNameRef = React.useRef();
@@ -25,10 +26,10 @@ const SpecificProjectDetail = () => {
     id: id,
     data: {
       tasks: {
-        "t-1": { id: "t-1", name: "TO DO" },
-        "t-2": { id: "t-2", name: "IN PROGRESS" },
-        "t-3": { id: "t-3", name: "ON HOLD" },
-        "t-4": { id: "t-4", name: "DONE ✔️" },
+        "t-1": { id: "t-1", name: "Task 1" },
+        "t-2": { id: "t-2", name: "Task 2" },
+        "t-3": { id: "t-3", name: "Task 3" },
+        "t-4": { id: "t-4", name: "Task 4" },
       },
       columns: {
         "c-1": {
@@ -48,6 +49,20 @@ const SpecificProjectDetail = () => {
     dispatch(setIsHomePage(false));
   }, []);
 
+  const handleProjectData = (data) => {
+    console.log("🚀 ~ handleProjectData ~ data:", data);
+  };
+
+  React.useEffect(() => {
+    if (!id) return;
+
+    useAxios({
+      path: `projects/getProjectById/${id}`,
+      navigate,
+      successCb: handleProjectData,
+    });
+  }, [id]);
+
   const handleBackArrowClick = () => {
     navigate("/home");
   };
@@ -56,7 +71,7 @@ const SpecificProjectDetail = () => {
     dispatch(setSelectedCardIndex(0));
   };
 
-  const handleCreateTask = (heading, discription) => {};
+  const handleCreateTask = (heading, description) => {};
 
   return (
     <div
@@ -97,7 +112,7 @@ const SpecificProjectDetail = () => {
             >
               <BiArrowBack />
             </div>
-            {name.substring(1)}
+            {"name"}
           </div>
           <div className="grayLine" />
           <ListPage

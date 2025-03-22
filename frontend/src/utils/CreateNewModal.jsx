@@ -39,14 +39,14 @@ const CreateNewModal = ({
 
   const handleSubmitFunc = () => {
     const name = nameRef?.current?.value.trim();
-    const discription = discriptionRef?.current?.value.trim();
+    const description = discriptionRef?.current?.value.trim();
 
     if (type === "Delete") return handleDeleteSubmit(name);
 
-    if (name === "" || discription === "") {
+    if (name === "" || description === "") {
       return showErrorFunc();
     }
-    handleSubmit?.(name, discription);
+    handleSubmit?.(name, description);
   };
 
   return (
@@ -95,7 +95,7 @@ const CreateNewModal = ({
               margin: "15px 0",
             }}
           >
-            <label>{name} Discription:</label>
+            <label>{name} Description:</label>
             <input
               style={{ height: "3vh", border: "none" }}
               ref={discriptionRef}

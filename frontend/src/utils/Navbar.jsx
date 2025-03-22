@@ -19,7 +19,7 @@ const Navbar = ({ visitorsPage = false }) => {
   const handleLogout = () => {
     useAxios({
       navigate,
-      path: "logout",
+      path: "auth/logout",
       type: "delete",
       successCb: () => {
         localStorage.clear();

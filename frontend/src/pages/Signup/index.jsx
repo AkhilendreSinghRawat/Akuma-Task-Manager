@@ -1,59 +1,56 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState } from "react";
 
-import axios from '../../utils/axios'
-import { toast } from 'react-toastify'
-import { Dna } from 'react-loader-spinner'
-import { PasswordValidator } from '../../utils/PasswordValidator'
+import axios from "../../utils/axios";
+import { toast } from "react-toastify";
+import { Dna } from "react-loader-spinner";
+import { PasswordValidator } from "../../utils/PasswordValidator";
 
-import Navbar from '../../utils/Navbar'
-import Footer from '../../utils/Footer'
+import Navbar from "../../utils/Navbar";
+import Footer from "../../utils/Footer";
 
 const Signup = () => {
-  const emailRef = useRef()
-  const passwordRef = useRef()
-  const confirmPasswordRef = useRef()
-  const [loader, setLoader] = useState(false)
+  const emailRef = useRef();
+  const passwordRef = useRef();
+  const confirmPasswordRef = useRef();
+  const [loader, setLoader] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    if (!PasswordValidator(passwordRef?.current?.value)) return
+    if (!PasswordValidator(passwordRef?.current?.value)) return;
     if (passwordRef?.current?.value !== confirmPasswordRef?.current?.value) {
-      toast.error("Passwords Didn't Match!")
-      return
+      toast.error("Passwords Didn't Match!");
+      return;
     }
-    setLoader(true)
 
-    axios
-      .post('/register', {
+    setLoader(true);
+    try {
+      const res = await axios.post("/auth/register", {
         email: emailRef?.current?.value,
         password: passwordRef?.current?.value,
-      })
-      .then((res) => {
-        if (res.status === 200) {
-          localStorage.setItem(
-            'token',
-            JSON.stringify({
-              accessToken: res?.data?.accessToken,
-              refreshToken: res?.data?.refreshToken,
-            })
-          )
-          navigate('/home')
-          toast.success('Successfully Registered')
-        } else {
-          toast.error('Something went wrong!')
-        }
-        setLoader(false)
-      })
-      .catch((err) => {
-        toast.error(err?.response?.data.message)
-        setLoader(false)
-      })
-  }
+      });
+
+      if (res.status === 200) {
+        localStorage.setItem(
+          "token",
+          JSON.stringify({
+            accessToken: res?.data?.accessToken,
+            refreshToken: res?.data?.refreshToken,
+          })
+        );
+        navigate("/home");
+        toast.success("Successfully Registered");
+      }
+    } catch (err) {
+      toast.error(err?.response?.data.message);
+    } finally {
+      setLoader(false);
+    }
+  };
 
   return (
     <div className="componenetHeight">
-      <Navbar />
+      <Navbar visitorsPage />
       <div className="FormContainer">
         <form className="Form" onSubmit={handleSubmit}>
           <label>Email</label>
@@ -62,7 +59,7 @@ const Signup = () => {
             id="email"
             type="email"
             required
-            value={'test@test.com'}
+            value={"test@test.com"}
             ref={emailRef}
           />
           <label>Password</label>
@@ -71,7 +68,7 @@ const Signup = () => {
             id="password"
             type="password"
             required
-            value={'Akhilendre@321'}
+            value={"Akhilendre@321"}
             ref={passwordRef}
           />
           <label>ConfirmPassword</label>
@@ -80,7 +77,7 @@ const Signup = () => {
             id="confirmPassword"
             type="password"
             required
-            value={'Akhilendre@321'}
+            value={"Akhilendre@321"}
             ref={confirmPasswordRef}
           />
           {loader ? (
@@ -90,10 +87,10 @@ const Signup = () => {
               width="100"
               ariaLabel="dna-loading"
               wrapperStyle={{
-                width: '100%',
-                backgroundColor: 'darkcyan',
-                borderRadius: '0.5vw',
-                margin: '1vh 0',
+                width: "100%",
+                backgroundColor: "darkcyan",
+                borderRadius: "0.5vw",
+                margin: "1vh 0",
               }}
               wrapperClass="dna-wrapper"
             />
@@ -108,7 +105,7 @@ const Signup = () => {
       </div>
       <Footer />
     </div>
-  )
-}
+  );
+};
 
-export default Signup
+export default Signup;

@@ -12,6 +12,8 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+  background-color: white;
+  color: black;
 }
 
 body {
@@ -20,4 +22,13 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+}
+
+input {
+  background-color: white;
+  color: black;
+}
+
+button {
+  background-color: white;
 }

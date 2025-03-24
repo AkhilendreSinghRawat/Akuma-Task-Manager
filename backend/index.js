@@ -13,119 +13,105 @@ app.use(
 );
 
 const mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost:27017/TaskManager", () => {
+mongoose.set("strictQuery", false);
+mongoose.connect("mongodb://0.0.0.0:27017/TaskManager").then(() => {
   console.log("Connected to MongoDB");
 });
 
-const userModel = require("./Schemas/userSchema.js");
-const dataModel = require("./Schemas/dataSchema.js");
-const refreshTokenModel = require("./Schemas/refreshTokenSchema.js");
+const userModel = require("./models/userModel.js");
+const projectsModel = require("./models/projectModel.js");
+const refreshTokenModel = require("./models/refreshTokenModel.js");
 
-const DATA = [
-  {
-    heading: "Dashboard",
-    discription:
-      "salkdjflkdsajfldsa;kjfsalkdjfldsakjflksajflkdsajf;lsakjflkdsajflkdsanvkdsadnv;lsan./asndlkfnsav.dsanvlkdsanv",
-    id: 0,
-  },
-  {
-    heading:
-      "Dashboardsadjflkdsajflkdssadkfm;ksdaf;sadfk;sldkf;dslkfajflkdsjflkdsjflksdjf",
-    discription: "salkdjflkdsajfldsa;kjf",
-    id: 1,
-  },
-  {
-    heading: "Dashboard",
-    discription: "salkdjflkdsajfldsa;kjf",
-    id: 2,
-  },
-  {
-    heading: "Dashboard",
-    discription: "salkdjflkdsajfldsa;kjf",
-    id: 3,
-  },
-  {
-    heading: "Dashboard",
-    discription: "salkdjflkdsajfldsa;kjf",
-    id: 4,
-  },
-  {
-    heading: "Dashboard",
-    discription: "salkdjflkdsajfldsa;kjf",
-    id: 5,
-  },
-  {
-    heading: "Dashboard",
-    discription: "salkdjflkdsajfldsa;kjf",
-    id: 6,
-  },
-  {
-    heading: "Dashboard",
-    discription: "salkdjflkdsajfldsa;kjf",
-    id: 7,
-  },
-  {
-    heading: "Dashboard",
-    discription: "salkdjflkdsajfldsa;kjf",
-    id: 8,
-  },
-  {
-    heading: "akhilendre",
-    discription: "salkdjflkdsajfldsa;kjf",
-    id: 9,
-  },
-];
+//Authorization
+const generateAccessToken = (user) =>
+  jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1d" });
 
-const generateAccessToken = (user) => {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1d" });
-};
-
-const generateRefreshToken = (user) => {
-  return jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "30d" });
-};
+const generateRefreshToken = (user) =>
+  jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "30d" });
 
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
   if (token == null)
-    return res.status(401).json({ message: "Token Not Found" }); //no token
+    return res.status(401).json({ message: "Token Not Found" });
 
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    if (err)
-      return res.status(403).json({ message: "Token Is Nolonger Valid" }); //token is nolonger invalid
-    req.user = user;
-    next();
-  });
+  try {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+      if (err)
+        return res
+          .status(403)
+          .json({ message: "Token Is Nolonger Valid", error: err });
+
+      req.user = user;
+      next();
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Internal Server Error", error: err });
+  }
 };
 
+app.post("/token", async (req, res) => {
+  if (req.body.refreshToken == null)
+    return res.status(401).json({ message: "Token Not Found" });
+
+  try {
+    const refreshToken = await refreshTokenModel.find({
+      token: req.body.refreshToken,
+    });
+
+    if (!refreshToken.length) {
+      return res.status(403).json({ message: "Invalid Refresh Token" });
+    }
+
+    jwt.verify(
+      req.body.refreshToken,
+      process.env.REFRESH_TOKEN_SECRET,
+      async (err, user) => {
+        if (err) {
+          const result = await refreshTokenModel.findOneAndDelete({
+            token: req.body.refreshToken,
+          });
+          console.log(result);
+          return res
+            .status(403)
+            .json({ reason: "Refresh Token Is Nolonger Valid", error: err });
+        }
+        console.log("user: ", user);
+        const accessToken = generateAccessToken({ email: user.email });
+        res.status(200).json({ accessToken });
+      }
+    );
+  } catch (err) {
+    res.status(500).json({ message: "Internal Server Error", error: err });
+  }
+});
+
+//project api's
 app.post("/addNewProject", authenticateToken, async (req, res) => {
-  const { heading, discription } = req.body;
-  if (!heading || !discription)
+  const { heading, description } = req.body;
+  if (!heading || !description)
     return res
       .status(400)
-      .json({ message: "Heading and Discription are requried!" });
+      .json({ message: "Heading and Description are requried!" });
 
   try {
     const user = await userModel.findOne({ email: req.user.email });
+    if (!user) return res.status(404).json({ message: "User not found" });
 
-    if (user) {
-      const data = new dataModel({
-        user,
-        data: { heading, discription },
-      });
+    const data = await projectsModel.findOne({ heading });
+    if (data) return res.status(403).json({ message: "Project already exist" });
 
-      data.save((err, result) => {
-        if (err) {
-          console.error("Error on saving project data: ", err);
-          return res
-            .status(409)
-            .json({ message: "Error while saving token", error: err });
-        }
+    const newData = new projectsModel({
+      user,
+      data: { heading, description },
+    });
 
-        console.info("Result on saving project data: ", result);
-        return res.status(200).json({ message: "New Project Created 🎉" });
-      });
-    }
+    const result = await newData.save();
+    console.log(`New Project Created 🎉: ${result.data.heading}`);
+
+    return res
+      .status(200)
+      .json({ message: `New Project Created 🎉: ${result.data.heading}` });
   } catch (err) {
     console.error("Error while adding new project: ", err);
     return res
@@ -135,155 +121,148 @@ app.post("/addNewProject", authenticateToken, async (req, res) => {
 });
 
 app.get("/getProjectsData", authenticateToken, async (req, res) => {
+  const { searchValue } = req.query;
   try {
-    const data = await dataModel.find();
-    console.log("Data model ", data);
+    const user = await userModel.findOne({ email: req.user.email });
+    const data = await projectsModel.find({ user });
+
+    if (searchValue)
+      return res.json(
+        data.filter((item) =>
+          item.data.heading.toLowerCase().includes(searchValue)
+        )
+      );
 
     return res.json(data);
   } catch (err) {
-    console.error("Error while adding new project: ", err);
+    console.error("Error while fetching project data: ", err);
     return res
       .status(500)
-      .json({ message: "Error while adding new project:", error: err });
+      .json({ message: "Error while fetching project data:", error: err });
   }
 });
 
+app.put("/editProject", authenticateToken, async (req, res) => {
+  const { _id, heading, description } = req.body;
+  if (!_id) return res.status(400).json({ message: "Invalid Id" });
+
+  if (!heading || !description)
+    return res
+      .status(400)
+      .json({ message: "Heading and Description are requried!" });
+
+  try {
+    const user = await userModel.findOne({ email: req.user.email });
+    const data = await projectsModel.findOneAndUpdate(
+      { user, _id },
+      { data: { heading, description } }
+    );
+    if (!data) return res.status(404).json({ message: "Project not found" });
+    console.log("Project Edited Successfully: ", data);
+
+    return res
+      .status(200)
+      .json({ message: "Project Edited Successfully", data });
+  } catch (err) {
+    console.error("Error while editing project data: ", err);
+    return res
+      .status(500)
+      .json({ message: "Error while editing project data:", error: err });
+  }
+});
+
+app.delete("/deleteProject", authenticateToken, async (req, res) => {
+  const { _id } = req.body;
+  if (!_id) return res.status(400).json({ message: "Specify Id to delete" });
+
+  try {
+    const user = await userModel.findOne({ email: req.user.email });
+    const result = await projectsModel.findOneAndDelete({
+      _id,
+    });
+    if (!result) return res.status(404).json({ message: "Project not found" });
+
+    console.log(result);
+    res.status(200).json({ message: "Project Deleted Successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Internal Server Error", error: err });
+  }
+});
+
+//task api's
 app.post("/addNewTask", authenticateToken, (req, res) => {});
 
-app.delete("/logout", (req, res) => {
-  refreshTokenModel.findOneAndDelete(
-    { token: req.body.refreshToken },
-    (err, result) => {
-      if (err) {
-        console.log(err);
-        res
-          .status(409)
-          .json({ message: "Error while deleting token", error: err });
-        return;
-      }
-      console.log(result);
-    }
-  );
-  res.status(204).json({ message: "Successfully logged out" });
-});
-
-app.post("/token", (req, res) => {
-  if (req.body.refreshToken == null) return res.sendStatus(401);
-  const refreshToken = refreshTokenModel.find((token) => {
-    return token === req.body.refreshToken;
-  });
-  if (!refreshToken) {
-    res.status(403).json({ message: "Invalid Refresh Token" });
-    return;
-  }
-
-  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-    if (err)
-      return res
-        .status(403)
-        .json({ message: "Error generating access token", err });
-    const accessToken = generateAccessToken({ email: user.email });
-    res.status(200).json({ accessToken: accessToken });
-  });
-});
-
-app.post("/register", (req, res) => {
-  userModel.findOne({ email: req.body.email }, (err, result) => {
-    if (err) {
-      console.log(err);
-      return res
-        .status(500)
-        .json({ message: "Internal Server Error", error: err });
-    }
-    if (result) {
+// Authentication
+app.post("/register", async (req, res) => {
+  try {
+    const user = await userModel.findOne({ email: req.body.email });
+    if (user)
       return res.status(403).json({ message: "Email already registered" });
-    }
-    bcrypt
-      .hash(req.body.password, 10)
-      .then((hashedPassword) => {
-        const emailObject = {
-          email: req.body.email,
-        };
-        const accessToken = generateAccessToken(emailObject);
-        const refreshToken = generateRefreshToken(emailObject);
-        const newRefreshToken = new refreshTokenModel({ token: refreshToken });
-        newRefreshToken.save((err, result) => {
-          if (err) {
-            console.log(err);
-            res
-              .status(409)
-              .json({ message: "Error while saving token", error: err });
-            return;
-          }
-          console.log(result);
-        });
-        const newUser = new userModel({
-          email: req.body.email,
-          password: hashedPassword,
-          name: req.body.name,
-        });
-        newUser.save((err, result) => {
-          if (err) {
-            console.log(err);
-            res
-              .status(409)
-              .json({ message: "Error while saving user", error: err });
-            return;
-          }
-          console.log(result);
-          res
-            .status(200)
-            .json({ accessToken: accessToken, refreshToken: refreshToken });
-        });
-      })
-      .catch((err) =>
-        res.status(500).json({ message: "Internal Server Error", error: err })
-      );
-  });
+
+    const hashedPassword = bcrypt.hash(req.body.password, 10);
+    const emailObject = {
+      email: req.body.email,
+    };
+    const accessToken = generateAccessToken(emailObject);
+    const refreshToken = generateRefreshToken(emailObject);
+    const newRefreshToken = new refreshTokenModel({ token: refreshToken });
+    const newRefreshTokenResult = await newRefreshToken.save();
+    console.log(newRefreshTokenResult);
+
+    const newUser = new userModel({
+      email: req.body.email,
+      password: hashedPassword,
+      name: req.body.name,
+    });
+    const result = await newUser.save();
+    console.log(`New User Register ${result}`);
+    res
+      .status(200)
+      .json({ accessToken: accessToken, refreshToken: refreshToken });
+  } catch (err) {
+    res.status(500).json({ message: "Internal Server Error", error: err });
+  }
 });
 
-app.post("/login", (req, res) => {
-  userModel.findOne({ email: req.body.email }, (err, user) => {
-    if (err) {
-      console.log(err);
-      return res
-        .status(500)
-        .json({ message: "Internal Server Error", error: err });
+app.post("/login", async (req, res) => {
+  try {
+    const user = await userModel.findOne({ email: req.body.email });
+    if (!user) return res.status(403).json({ message: "Email not registered" });
+
+    const isMatch = bcrypt.compare(req.body.password, user.password);
+    if (isMatch) {
+      const emailObject = { email: user.email };
+      const accessToken = generateAccessToken(emailObject);
+      const refreshToken = generateRefreshToken(emailObject);
+      const newRefreshToken = new refreshTokenModel({
+        token: refreshToken,
+      });
+
+      const refreshTokenResult = await newRefreshToken.save();
+      console.log(refreshTokenResult);
+
+      console.log(`User logged in: ${user}`);
+      res
+        .status(200)
+        .json({ accessToken: accessToken, refreshToken: refreshToken });
+    } else {
+      res.status(409).json({ message: "Incorrect password" });
     }
-    if (!user) {
-      return res.status(403).json({ message: "Email not registered" });
-    }
-    bcrypt
-      .compare(req.body.password, user.password)
-      .then((isMatch) => {
-        if (isMatch) {
-          const emailObject = { email: user.email };
-          const accessToken = generateAccessToken(emailObject);
-          const refreshToken = generateRefreshToken(emailObject);
-          const newRefreshToken = new refreshTokenModel({
-            token: refreshToken,
-          });
-          newRefreshToken.save((err, result) => {
-            if (err) {
-              console.log(err);
-              res
-                .status(409)
-                .json({ message: "Error while saving token", error: err });
-              return;
-            }
-            console.log(result);
-          });
-          res
-            .status(200)
-            .json({ accessToken: accessToken, refreshToken: refreshToken });
-        } else {
-          res.status(409).json({ message: "Incorrect password" });
-        }
-      })
-      .catch((err) =>
-        res.status(500).json({ message: "Internal Server Error", error: err })
-      );
-  });
+  } catch (err) {
+    res.status(500).json({ message: "Internal Server Error", error: err });
+  }
+});
+
+app.delete("/logout", async (req, res) => {
+  try {
+    const result = await refreshTokenModel.findOneAndDelete({
+      token: req.body.refreshToken,
+    });
+    console.log(result);
+    res.status(200).json({ message: "Successfully logged out" });
+  } catch (err) {
+    res.status(500).json({ message: "Internal Server Error", error: err });
+  }
 });
 
 app.listen(process.env.PORT, () => {

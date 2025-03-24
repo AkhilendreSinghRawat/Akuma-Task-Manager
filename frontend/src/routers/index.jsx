@@ -47,7 +47,7 @@ const Routing = () => {
           }
         />
         <Route
-          path="/home/project/:name/:id"
+          path="/home/project/:id"
           exact
           element={
             <ProtectedRoute>

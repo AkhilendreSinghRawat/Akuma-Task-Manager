@@ -135,7 +135,7 @@ const getProjectById = async (req, res) => {
     result.tasks = tasks;
 
     console.log("Fetched Project:", result);
-    return res.status(200).json({ data: result });
+    return res.status(200).json(result);
   } catch (err) {
     console.error("Error while fetching project: ", err);
     return res

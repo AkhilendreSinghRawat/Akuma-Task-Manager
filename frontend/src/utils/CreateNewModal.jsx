@@ -122,7 +122,7 @@ const CreateNewModal = ({
               onClick={handleSubmitFunc}
             >
               {type == "Delete"
-                ? "I understand the consequences, delete this project"
+                ? `I understand the consequences, delete this ${name}`
                 : `${type} ${name}`}
             </button>
           </div>
@@ -162,12 +162,12 @@ const DeleteLabel = ({ name }) => {
   return (
     <>
       <label style={{ marginBottom: "15px" }}>
-        This action be <span style={{ fontWeight: "bold" }}>cannot</span>{" "}
-        undone. This will permanently delete the{" "}
-        <span style={{ fontWeight: "bold" }}>{name}</span> project.
+        This action <span style={{ fontWeight: "bold" }}>cannot</span> be
+        undone. This will permanently delete{" "}
+        <span style={{ fontWeight: "bold" }}>{name}</span> .
       </label>
       <label style={{ fontSize: "13px" }}>
-        Please type the name of the project to confirm.
+        Please type the name to confirm.
       </label>
     </>
   );

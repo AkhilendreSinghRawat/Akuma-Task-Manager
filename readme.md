@@ -47,4 +47,4 @@ cd <Akuma-Task-Manager>
    - The frontend server will run on **port 5173**.
 
 ## Deployed Application
-You can check the deployed app at: [https://akuma-task-manager-fe.vercel.app/](Deployed URL)
+You can check the deployed app at: [https://akuma-task-manager-fe.vercel.app/]

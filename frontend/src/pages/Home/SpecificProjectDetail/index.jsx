@@ -44,8 +44,7 @@ const SpecificProjectDetail = () => {
     dispatch(setIsHomePage(false));
   }, []);
 
-  const handleProjectData = ({ data }) => {
-    setHeading(data?.heading);
+  const handleProjectData = (data, checkAfterUpdate) => {
     const newTasksData = JSON.parse(JSON.stringify(defaultTasksData));
 
     data.tasks.sort((a, b) => a.orderNumber - b.orderNumber);
@@ -58,14 +57,21 @@ const SpecificProjectDetail = () => {
       newTasksData.columns[task.status].taskIds.push(task._id);
     }
 
+    if (
+      checkAfterUpdate &&
+      JSON.stringify(newTasksData) === JSON.stringify(tasksData)
+    )
+      return;
+
+    setHeading(data?.heading);
     setTasksData(newTasksData);
   };
 
-  const getProjectById = () => {
+  const getProjectById = async (checkAfterUpdate) => {
     useAxios({
       path: `projects/getProjectById/${id}`,
       navigate,
-      successCb: handleProjectData,
+      successCb: ({ data }) => handleProjectData(data, checkAfterUpdate),
     });
   };
 

@@ -23,6 +23,27 @@ const ListPage = ({ tasksData, setTasksData, getProjectById }) => {
       return;
     }
 
+    if (destination.droppableId === source.droppableId) {
+      setTasksData((prev) => {
+        const newTasksData = { ...prev };
+        const newTaskIds = prev.columns[destination.droppableId].taskIds;
+        newTaskIds.splice(source.index, 1);
+        newTaskIds.splice(destination.index, 0, draggableId);
+        return newTasksData;
+      });
+    } else {
+      setTasksData((prev) => {
+        const newTasksData = { ...prev };
+        prev.columns[source.droppableId].taskIds.splice(source.index, 1);
+        prev.columns[destination.droppableId].taskIds.splice(
+          destination.index,
+          0,
+          draggableId
+        );
+        return newTasksData;
+      });
+    }
+
     useAxios({
       path: `tasks/editTaskStatus/${draggableId}`,
       type: "put",
@@ -31,31 +52,8 @@ const ListPage = ({ tasksData, setTasksData, getProjectById }) => {
         status: destination.droppableId,
         orderNumber: destination.index + 1,
       },
-      successCb: getProjectById,
+      successCb: () => getProjectById(true),
     });
-
-    // if (destination.droppableId === source.droppableId) {
-    //   setTasksData((prev) => {
-    //     const newTasksData = { ...prev };
-    //     const newTaskIds = prev.columns[destination.droppableId].taskIds;
-    //     newTaskIds.splice(source.index, 1);
-    //     newTaskIds.splice(destination.index, 0, draggableId);
-    //     return newTasksData;
-    //   });
-
-    //   return;
-    // }
-
-    // setTasksData((prev) => {
-    //   const newTasksData = { ...prev };
-    //   prev.columns[source.droppableId].taskIds.splice(source.index, 1);
-    //   prev.columns[destination.droppableId].taskIds.splice(
-    //     destination.index,
-    //     0,
-    //     draggableId
-    //   );
-    //   return newTasksData;
-    // });
   };
 
   return (
